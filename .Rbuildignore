@@ -2,3 +2,7 @@
 ^\.Rproj\.user$
 ^_devhistory\.R$
 ^LICENSE\.md$
+^README\.Rmd$
+^README-.*\.png$
+^CONDUCT\.md$
+^CONTRIBUTING\.md$

@@ -10,3 +10,7 @@ rrtools::use_compendium(paste0("../", my_compendium), open = TRUE)
 usethis::use_git()
 ## Add a license
 usethis::use_agpl3_license()
+## Add README
+rrtools::use_readme_rmd()
+file.remove(c("CONDUCT.md", "CONTRIBUTING.md"))
+
