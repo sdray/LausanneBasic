@@ -6,3 +6,4 @@
 ^README-.*\.png$
 ^CONDUCT\.md$
 ^CONTRIBUTING\.md$
+^make\.R$
