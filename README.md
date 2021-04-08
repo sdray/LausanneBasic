@@ -1,12 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Introduction
+# LausanneBasic
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh///master?urlpath=rstudio)
 
-This repository contains the material for the course Training in ade4 in
-R - Module I: Basic methods.
+This repository contains the material for the course *Training in ade4
+in R - Module I: Basic methods*.
 
 ## Contents
 
@@ -55,17 +55,15 @@ Desktop](https://rstudio.com/products/rstudio/download/).
 
 You can download the compendium as a zip from from this URL:
 [master.zip](/archive/master.zip). After unzipping: - open the `.Rproj`
-file in RStudio - run `devtools::install()` to ensure you have the
-packages this analysis depends on (also listed in the
-[DESCRIPTION](/DESCRIPTION) file). - finally, source `make.R` to compile
-the different documents of the course.
+file in RStudio - source `make.R` file to compile the different
+documents of the course.
 
 ### How to cite
 
 Please cite this document as:
 
 > Dray, S. (2021). Training in ade4 in R - Module I: Basic methods .
-> Accessed 07 avril 2021. Online at <https://doi.org/xxx/xxx>
+> Accessed 08 avril 2021. Online at <https://doi.org/xxx/xxx>
 
 ### Licenses
 
@@ -80,3 +78,33 @@ attribution requested in reuse
 ### Contributions
 
 We welcome contributions from everyone.
+
+### Session Information
+
+``` r
+utils::sessionInfo()
+#> R version 4.0.4 (2021-02-15)
+#> Platform: x86_64-pc-linux-gnu (64-bit)
+#> Running under: Ubuntu 20.04.2 LTS
+#> 
+#> Matrix products: default
+#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
+#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
+#> 
+#> locale:
+#>  [1] LC_CTYPE=fr_FR.UTF-8       LC_NUMERIC=C              
+#>  [3] LC_TIME=fr_FR.UTF-8        LC_COLLATE=fr_FR.UTF-8    
+#>  [5] LC_MONETARY=fr_FR.UTF-8    LC_MESSAGES=fr_FR.UTF-8   
+#>  [7] LC_PAPER=fr_FR.UTF-8       LC_NAME=C                 
+#>  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+#> [11] LC_MEASUREMENT=fr_FR.UTF-8 LC_IDENTIFICATION=C       
+#> 
+#> attached base packages:
+#> [1] stats     graphics  grDevices utils     datasets  methods   base     
+#> 
+#> loaded via a namespace (and not attached):
+#>  [1] compiler_4.0.4    magrittr_2.0.1    tools_4.0.4       htmltools_0.5.1.1
+#>  [5] yaml_2.2.1        stringi_1.5.3     rmarkdown_2.7     knitr_1.31       
+#>  [9] stringr_1.4.0     xfun_0.22         digest_0.6.27     rlang_0.4.10     
+#> [13] evaluate_0.14
+```

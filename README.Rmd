@@ -14,11 +14,11 @@ knitr::opts_chunk$set(
 Title <- "Training in ade4 in R - Module I: Basic methods"
 ```
 
-# Introduction
+# LausanneBasic
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh///master?urlpath=rstudio)
 
-This repository contains the material for the course `r Title`. 
+This repository contains the material for the course *`r Title`*. 
 
 
 ## Contents
@@ -54,9 +54,7 @@ itself and optionally [RStudio Desktop](https://rstudio.com/products/rstudio/dow
 You can download the compendium as a zip from from this URL:
 [master.zip](/archive/master.zip). After unzipping:
 - open the `.Rproj` file in RStudio
-- run `devtools::install()` to ensure you have the packages this analysis depends on (also listed in the
-[DESCRIPTION](/DESCRIPTION) file).
-- finally, source `make.R` to compile the different documents of the course.
+- source `make.R` file to compile the different documents of the course.
 
 ### How to cite
 
@@ -76,3 +74,8 @@ Please cite this document as:
 ### Contributions
 
 We welcome contributions from everyone. 
+
+### Session Information
+```{r}
+utils::sessionInfo()
+```
