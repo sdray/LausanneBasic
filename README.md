@@ -27,7 +27,8 @@ personal work. The structure of this compendium is as follows:
   - **Session 1**: Welcome, presentation of participants. Introduction,
     packages installation. Theory and 3D explanation of multivariate
     methods.
-      - Course \[Rmd|html|pdf\]
+      - Course
+        \[[html](./course/session1/session1.Rmd)|[pdf](course/session1/session1.pdf)|[Rmd](course/session1/session1.Rmd)\]
       - Practical \[Rmd|html|pdf\]
   - **Session 2**: Analysis of environmental data: Principal Component
     Analysis.
@@ -63,7 +64,7 @@ documents of the course.
 Please cite this document as:
 
 > Dray, S. (2021). Training in ade4 in R - Module I: Basic methods .
-> Accessed 08 avril 2021. Online at <https://doi.org/xxx/xxx>
+> Accessed 15 avril 2021. Online at <https://doi.org/xxx/xxx>
 
 ### Licenses
 
