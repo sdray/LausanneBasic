@@ -16,7 +16,7 @@ Title <- "Training in ade4 in R - Module I: Basic methods"
 
 # LausanneBasic
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh///main?urlpath=rstudio)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/sdray/LausanneBasic/main?urlpath=rstudio)
 
 This repository contains the material for the course *`r Title`*. 
 
@@ -30,7 +30,7 @@ The directory contains the material for the first four sessions (course and prac
 
 ## Program
 * **Session 1**: Welcome, presentation of participants. Introduction, packages installation. Theory and 3D explanation of multivariate methods.
-    - Course [[html](course/session1/session1.Rmd)|[pdf](course/session1/session1.pdf)|[Rmd](course/session1/session1.Rmd)]
+    - Course [[html](course/session1/session1.html)|[pdf](course/session1/session1.pdf)|[Rmd](course/session1/session1.Rmd)]
     - Practical [Rmd|html|pdf]
 * **Session 2**: Analysis of environmental data: Principal Component Analysis.
     - Course [Rmd|html|pdf]
