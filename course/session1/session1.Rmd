@@ -11,6 +11,8 @@ output:
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+    includes:
+            before_body: preamble.tex
 ---
 
 ```{r setup, include=FALSE}
@@ -22,20 +24,252 @@ knitr::opts_chunk$set(tidy=TRUE, tidy.opts=list(width.cutoff=50), fig.height= 4,
 library(xaringanthemer)
 style_duo(primary_color = "#1F4257", secondary_color = "#F97B64", table_row_even_background_color = "#1F4257")
 ```
-
-$$\newcommand{\tr}{\hspace{-0.05cm}^{\top}\hspace{-0.05cm}} % transpose d'une matrice$$
-
-$$\newcommand{\mb}[1]{\mathbf{#1}}$$
-
-$$\newcommand{\sqnorm}[2]{
- \left \|  #1  \right \|^2_{#2}
-}$$
-
-$$\newcommand{\norm}[2]{
- \left \| #1 \right \|_{#2}
-}$$
-
-
 ---
-# Introduction
+# **ade4**
+
+*  R package since 2002
+*  Exploratory analysis of ecological data
+  - Multivariate methods
+  - Graphical functions
+
+```{r, out.width="80%", echo = FALSE}
+knitr::include_graphics("img/Fig-figCitade4.png")
+```
 ---
+# Data structure
+
+.pull-left[
+```{r, echo = FALSE}
+knitr::include_graphics("img/EcolDatasets.png")
+```
+]
+
+.pull-right[
+```{r, echo = FALSE}
+knitr::include_graphics("img/EcolDatasets2.png")
+```
+]
+---
+# Data structure
+
+.pull-left[
+```{r, echo = FALSE}
+knitr::include_graphics("img/EcolDatasets-module1.png")
+```
+]
+
+.pull-right[
+```{r, echo = FALSE}
+knitr::include_graphics("img/EcolDatasets2.png")
+```
+]
+---
+# **ade4**: the French way
+
+.pull-left[
+```{r, echo = FALSE}
+knitr::include_graphics("img/Holmes-french.png")
+```
+]
+
+.pull-right[
+```{r, echo = FALSE}
+knitr::include_graphics("img/Dray-french.png")
+```
+]
+---
+# Two geometric views
+
+```{r, echo = FALSE}
+knitr::include_graphics("img/viewpoints.png")
+```
+.pull-left[
+what are the main similarities and differences between the individuals ?
+]
+
+.pull-right[
+what are the main relationships between the variables ?
+]
+---
+# Explore the space of individuals
+
+.center[
+
+[Go to practical 1](../../practical/session1/session1.html)
+
+]
+---
+# Geometric view for individuals
+```{r, echo = FALSE}
+knitr::include_graphics("img/geometry-individuals.png")
+```
+---
+# Two geometric views
+
+```{r, echo = FALSE, out.width="30%"}
+knitr::include_graphics("img/viewpoints.png")
+```
+
+.pull-left[
+* The principal axes
+
+$$ \mathbf{X}\tr\mathbf{D}\mathbf{X} \mathbf{Q} \mathbf{A} =  \mathbf{A} \bm{\Lambda} $$
+
+* The row scores
+
+$$\mathbf{L}=\mathbf{X}\mathbf{Q}\mathbf{A}$$
+
+* Maximization of
+
+$$ Q(\mathbf{a})=\mathbf{a}\tr\mathbf{Q}\tr\mathbf{X}\tr \mathbf{DXQa} = \lambda $$
+
+$$ Q(\mathbf{a})=\sqnorm{\mathbf{XQa}}{\mb{D}} = \lambda
+$$
+]
+
+.pull-right[
+* The principal components
+
+$$\mathbf{X} \mathbf{Q} \mathbf{X}\tr \mathbf{D} \mathbf{K} = \mathbf{B} \bm{\Lambda}$$
+* The column scores
+
+$$ \mathbf{C}=\mathbf{X}\tr\mathbf{D}\mathbf{B} $$
+* Maximization of 
+
+$$ S(\mathbf{b})=\mathbf{b}\tr\mathbf{D}\tr\mathbf{XQX}\tr\mathbf{Db}=\lambda $$
+
+$$ S(\mathbf{b})=\sqnorm{\mathbf{X}\tr\mathbf{Db}}{\mb{Q}} = \lambda
+$$
+
+]
+---
+# The `dudi` class in `ade4`
+```{r, echo = FALSE, out.width="30%"}
+knitr::include_graphics("img/viewpoints.png")
+```
+
+.pull-left[
+* The principal axes
+
+.center[
+`$c1`
+]
+
+* The row scores
+
+.center[
+`$li`
+]
+
+* Maximization of
+
+.center[
+`$eig`
+]
+]
+
+.pull-right[
+* The principal components
+
+.center[
+`$l1`
+]
+
+* The column scores
+
+.center[
+`$co`
+]
+
+* Maximization of 
+
+.center[
+`$eig`
+]
+
+]
+---
+# Methods for `dudi` objects
+
+* `print`
+* `summary`
+* `screeplot`
+* `scatter` / `biplot`
+* `score`
+* `is`
+* `t`
+* `inertia`
+* `suprow` / `supcol`
+* `reconst`
+* `dist.dudi`
+---
+# Implementaion in `ade4`
+
+* The `as.dudi` function is an internal function
+
+* It takes three arguments and returns an object of class `dudi`
+
+* It is called by user-friendly functions corresponding to different analyses
+
+* It can be used by experimented users to define their own analysis
+---
+# Module 1
+
+.left-column[
+```{r, echo = FALSE}
+knitr::include_graphics("img/onetable.png")
+```
+]
+
+.right-column[
+* Environmental variables 
+  - Quantitative variables
+      &rarr; Principal Component Analysis (`dudi.pca`)
+  - Categorical variables
+    &rarr; Multiple Correspondence Analysis (`dudi.acm`)
+  - Mix of both
+&rarr; Hill-Smith Analysis (`dudi.hillsmith`)
+
+* Species table
+  - Contingency table
+      &rarr; Correspondence Analysis (`dudi.coa`)
+  - Distance matrix
+      &rarr; Principal Coordinates Analysis (`dudi.pco`)
+]
+---
+# Packages
+
+* `ade4` to run the analyses
+
+* `adegraphics` to represent results
+
+* `rgl` to understand multivariate methods in interactive 3D
+---
+# ade4TkGUI
+
+```{r, echo = FALSE, out.width="80%"}
+knitr::include_graphics("img/adegraphics.png")
+```
+---
+# Resources
+.pull-left[
+```{r, echo = FALSE}
+knitr::include_graphics("img/book.png")
+```
+]
+
+.pull-right[
+* Mailing list:
+
+	http://listes.univ-lyon1.fr/wws/info/adelist
+
+
+* Development:
+
+	https://github.com/sdray/ade4
+
+
+* Courses (in French): 
+
+	http://pbil.univ-lyon1.fr/R/enseignement.html
+]

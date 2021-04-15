@@ -4,7 +4,7 @@
     <title>Training in ade4 in R - Module I: Basic methods</title>
     <meta charset="utf-8" />
     <meta name="author" content="Stéphane Dray" />
-    <meta name="date" content="2021-04-08" />
+    <meta name="date" content="2021-04-15" />
     <link rel="stylesheet" href="custom.css" type="text/css" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -15,31 +15,269 @@ class: center, middle, inverse, title-slide
 # Training in ade4 in R - Module I: Basic methods
 ## Introduction
 ### Stéphane Dray
-### 2021-04-08
+### 2021-04-15
 
 ---
 
+$$
+%center text/code
+\newcommand{\bcenter}{\begin{center}}
+\newcommand{\ecenter}{\end{center}}
+$$
+
+$$
+\newcommand{\bm}[1]{\boldsymbol{\mathbf{#1}}}
+\newcommand{\tr}{\hspace{-0.05cm}^{\top}\hspace{-0.05cm}}% transpose d'une matrice
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\pt}{\mathsmaller \bullet}% petit point pour les indices
+$$
 
 
+$$
+\newcommand{\triplet}[3]{
+% pour ecrire un triplet dans le texte
+$\left ( #1, #2, #3 \right )$
+}
+$$
+
+$$
+\newcommand{\sqnorm}[2]{
+%norme au carré
+\lVert  #1 \rVert^2_{#2}
+}
+$$
+
+$$
+\newcommand{\norm}[2]{
+%norme
+ \lVert #1 \rVert_{#2}
+}
+$$
 
 
-
-`$$\newcommand{\tr}{\hspace{-0.05cm}^{\top}\hspace{-0.05cm}} % transpose d'une matrice$$`
-
-`$$\newcommand{\mb}[1]{\mathbf{#1}}$$`
-
-`$$\newcommand{\sqnorm}[2]{
- \left \|  #1  \right \|^2_{#2}
-}$$`
-
-`$$\newcommand{\norm}[2]{
- \left \| #1 \right \|_{#2}
-}$$`
 
 
 ---
-# Introduction
+# **ade4**
+
+*  R package since 2002
+*  Exploratory analysis of ecological data
+  - Multivariate methods
+  - Graphical functions
+
+&lt;img src="img/Fig-figCitade4.png" width="80%" style="display: block; margin: auto;" /&gt;
 ---
+# Data structure
+
+.pull-left[
+&lt;img src="img/EcolDatasets.png" width="1101" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="img/EcolDatasets2.png" width="944" style="display: block; margin: auto;" /&gt;
+]
+---
+# Data structure
+
+.pull-left[
+&lt;img src="img/EcolDatasets-module1.png" width="1057" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="img/EcolDatasets2.png" width="944" style="display: block; margin: auto;" /&gt;
+]
+---
+# **ade4**: the French way
+
+.pull-left[
+&lt;img src="img/Holmes-french.png" width="1112" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="img/Dray-french.png" width="935" style="display: block; margin: auto;" /&gt;
+]
+---
+# Two geometric views
+
+&lt;img src="img/viewpoints.png" width="640" style="display: block; margin: auto;" /&gt;
+.pull-left[
+what are the main similarities and differences between the individuals ?
+]
+
+.pull-right[
+what are the main relationships between the variables ?
+]
+---
+# Explore the space of individuals
+
+.center[
+
+[Go to practical 1](../../practical/session1/session1.html)
+
+]
+---
+# Geometric view for individuals
+&lt;img src="img/geometry-individuals.png" width="1152" style="display: block; margin: auto;" /&gt;
+---
+# Two geometric views
+
+&lt;img src="img/viewpoints.png" width="30%" style="display: block; margin: auto;" /&gt;
+
+.pull-left[
+* The principal axes
+
+$$ \mathbf{X}\tr\mathbf{D}\mathbf{X} \mathbf{Q} \mathbf{A} =  \mathbf{A} \bm{\Lambda} $$
+
+* The row scores
+
+`$$\mathbf{L}=\mathbf{X}\mathbf{Q}\mathbf{A}$$`
+
+* Maximization of
+
+$$ Q(\mathbf{a})=\mathbf{a}\tr\mathbf{Q}\tr\mathbf{X}\tr \mathbf{DXQa} = \lambda $$
+
+$$ Q(\mathbf{a})=\sqnorm{\mathbf{XQa}}{\mb{D}} = \lambda
+$$
+]
+
+.pull-right[
+* The principal components
+
+`$$\mathbf{X} \mathbf{Q} \mathbf{X}\tr \mathbf{D} \mathbf{K} = \mathbf{B} \bm{\Lambda}$$`
+* The column scores
+
+$$ \mathbf{C}=\mathbf{X}\tr\mathbf{D}\mathbf{B} $$
+* Maximization of 
+
+$$ S(\mathbf{b})=\mathbf{b}\tr\mathbf{D}\tr\mathbf{XQX}\tr\mathbf{Db}=\lambda $$
+
+$$ S(\mathbf{b})=\sqnorm{\mathbf{X}\tr\mathbf{Db}}{\mb{Q}} = \lambda
+$$
+
+]
+---
+# The `dudi` class in `ade4`
+&lt;img src="img/viewpoints.png" width="30%" style="display: block; margin: auto;" /&gt;
+
+.pull-left[
+* The principal axes
+
+.center[
+`$c1`
+]
+
+* The row scores
+
+.center[
+`$li`
+]
+
+* Maximization of
+
+.center[
+`$eig`
+]
+]
+
+.pull-right[
+* The principal components
+
+.center[
+`$l1`
+]
+
+* The column scores
+
+.center[
+`$co`
+]
+
+* Maximization of 
+
+.center[
+`$eig`
+]
+
+]
+---
+# Methods for `dudi` objects
+
+* `print`
+* `summary`
+* `screeplot`
+* `scatter` / `biplot`
+* `score`
+* `is`
+* `t`
+* `inertia`
+* `suprow` / `supcol`
+* `reconst`
+* `dist.dudi`
+---
+# Implementaion in `ade4`
+
+* The `as.dudi` function is an internal function
+
+* It takes three arguments and returns an object of class `dudi`
+
+* It is called by user-friendly functions corresponding to different analyses
+
+* It can be used by experimented users to define their own analysis
+---
+# Module 1
+
+.left-column[
+&lt;img src="img/onetable.png" width="156" style="display: block; margin: auto;" /&gt;
+]
+
+.right-column[
+* Environmental variables 
+  - Quantitative variables
+      &amp;rarr; Principal Component Analysis (`dudi.pca`)
+  - Categorical variables
+    &amp;rarr; Multiple Correspondence Analysis (`dudi.acm`)
+  - Mix of both
+&amp;rarr; Hill-Smith Analysis (`dudi.hillsmith`)
+
+* Species table
+  - Contingency table
+      &amp;rarr; Correspondence Analysis (`dudi.coa`)
+  - Distance matrix
+      &amp;rarr; Principal Coordinates Analysis (`dudi.pco`)
+]
+---
+# Packages
+
+* `ade4` to run the analyses
+
+* `adegraphics` to represent results
+
+* `rgl` to understand multivariate methods in interactive 3D
+---
+# ade4TkGUI
+
+&lt;img src="img/adegraphics.png" width="80%" style="display: block; margin: auto;" /&gt;
+---
+# Resources
+.pull-left[
+&lt;img src="img/book.png" width="204" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+* Mailing list:
+
+	http://listes.univ-lyon1.fr/wws/info/adelist
+
+
+* Development:
+
+	https://github.com/sdray/ade4
+
+
+* Courses (in French): 
+
+	http://pbil.univ-lyon1.fr/R/enseignement.html
+]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
