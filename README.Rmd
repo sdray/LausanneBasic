@@ -52,7 +52,7 @@ installed on your computer the [R software](https://cloud.r-project.org/)
 itself and optionally [RStudio Desktop](https://rstudio.com/products/rstudio/download/).
 
 You can download the compendium as a zip from from this URL:
-[master.zip](/archive/master.zip). After unzipping:
+[main.zip](/archive/main.zip). After unzipping:
 - open the `.Rproj` file in RStudio
 - source `make.R` file to compile the different documents of the course.
 
@@ -60,7 +60,7 @@ You can download the compendium as a zip from from this URL:
 
 Please cite this document as:
 
-> Dray, S. (`r format(Sys.Date(), "%Y")`). `r Title` . Accessed `r format(Sys.Date(), "%d %b %Y")`. Online at <https://doi.org/xxx/xxx>
+> Dray, S. (`r format(Sys.Date(), "%Y")`). `r Title` . Accessed `r format(Sys.Date(), "%d %b %Y")`. Online at <https://github.com/sdray/LausanneBasic/>
 
 
 ### Licenses

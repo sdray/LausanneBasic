@@ -55,16 +55,17 @@ optionally [RStudio
 Desktop](https://rstudio.com/products/rstudio/download/).
 
 You can download the compendium as a zip from from this URL:
-[master.zip](/archive/master.zip). After unzipping: - open the `.Rproj`
-file in RStudio - source `make.R` file to compile the different
-documents of the course.
+[main.zip](/archive/main.zip). After unzipping: - open the `.Rproj` file
+in RStudio - source `make.R` file to compile the different documents of
+the course.
 
 ### How to cite
 
 Please cite this document as:
 
 > Dray, S. (2021). Training in ade4 in R - Module I: Basic methods .
-> Accessed 15 avril 2021. Online at <https://doi.org/xxx/xxx>
+> Accessed 16 avril 2021. Online at
+> <https://github.com/sdray/LausanneBasic/>
 
 ### Licenses
 
