@@ -55,7 +55,7 @@ optionally [RStudio
 Desktop](https://rstudio.com/products/rstudio/download/).
 
 You can download the compendium as a zip from from this URL:
-[main.zip](https://github.com/sdray/LausanneBasic/blob/main/archive/refs/heads/main.zip).
+[main.zip](https://github.com/sdray/LausanneBasic/archive/refs/heads/main.zip).
 After unzipping:
 
   - open the `.Rproj` file in RStudio
