@@ -4,7 +4,7 @@
     <title>Training in ade4 in R - Module I: Basic methods</title>
     <meta charset="utf-8" />
     <meta name="author" content="Stéphane Dray" />
-    <meta name="date" content="2021-04-15" />
+    <meta name="date" content="2021-04-17" />
     <link rel="stylesheet" href="custom.css" type="text/css" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 # Training in ade4 in R - Module I: Basic methods
 ## Introduction
 ### Stéphane Dray
-### 2021-04-15
+### 2021-04-17
 
 ---
 
@@ -58,6 +58,26 @@ $$
 
 
 ---
+# Material
+
+The content of the course is available at
+
+.center[&lt;https://github.com/sdray/LausanneBasic/&gt;]
+
+In R, you can download the course by
+
+`usethis::use_course("sdray/LausanneBasic", destdir = "~/Bureau/")`
+
+---
+# Required packages
+
+* `ade4` to run the analyses
+
+* `adegraphics` to represent results
+
+* `rgl` to understand multivariate methods in interactive 3D
+
+---
 # **ade4**
 
 *  R package since 2002
@@ -87,6 +107,32 @@ $$
 &lt;img src="img/EcolDatasets2.png" width="944" style="display: block; margin: auto;" /&gt;
 ]
 ---
+# Module 1: course outline
+We will explore the geometric properties, outputs and interpretation of multivariate analysis focusing on one-table methods. Last afternoon for case studies.
+
+.left-column[
+&lt;img src="img/onetable.png" width="156" style="display: block; margin: auto;" /&gt;
+]
+
+.right-column[
+* Environmental variables 
+  - Quantitative variables
+      &amp;rarr; Principal Component Analysis (`dudi.pca`)
+  - Categorical variables
+    &amp;rarr; Multiple Correspondence Analysis (`dudi.acm`)
+  - Mix of both
+&amp;rarr; Hill-Smith Analysis (`dudi.hillsmith`)
+
+* Species table
+  - Contingency table
+      &amp;rarr; Correspondence Analysis (`dudi.coa`)
+  - Distance matrix
+      &amp;rarr; Principal Coordinates Analysis (`dudi.pco`)
+]
+
+
+---
+
 # **ade4**: the French way
 
 .pull-left[
@@ -96,6 +142,10 @@ $$
 .pull-right[
 &lt;img src="img/Dray-french.png" width="935" style="display: block; margin: auto;" /&gt;
 ]
+
+Implementation of functions in `ade4` follows the duality diagram theory
+
+More details are provided in the paper published in Journal of Statistical Software available [here](https://www.jstatsoft.org/article/view/v022i04)
 ---
 # Two geometric views
 
@@ -118,8 +168,57 @@ what are the main relationships between the variables ?
 ---
 # Geometric view for individuals
 &lt;img src="img/geometry-individuals.png" width="1152" style="display: block; margin: auto;" /&gt;
+
+* Multivariate methods only perform geometric operations (rotations) to obtain the best viewpoint on the data
+
+* When many variables are considered, dimension reduction is also applied to simplify the interpretation
 ---
-# Two geometric views
+# Statistical triplet
+
+  Multivariate methods aim to answer these two questions and seek for small dimension hyperspaces (few axes) where the representations of individuals and variables are as close as possible to the original ones.
+
+
+To answer the two previous questions, we define
+
+* `\(\mb{Q}\)`, a `\(p \times p\)` positive symmetric matrix, used as an inner product in `\(\mathbb{R}^p\)` and thus allows to measure distances between the `\(n\)` individuals
+* `\(\mb{D}\)`,  a `\(n \times n\)` positive symmetric matrix, used as an inner product in `\(\mathbb{R}^n\)` and thus allows to measure relationships between the `\(p\)` variables.
+
+$$ \left ( \mathbf{X}, \mathbf{Q}, \mathbf{D} \right ) $$
+---
+# Duality diagram theory
+`$$\mathbf{X} \mathbf{Q} \mathbf{X}\tr \mathbf{D} \mathbf{K} = \mathbf{B} \bm{\Lambda}$$`
+    `$$\mathbf{X}\tr\mathbf{D}\mathbf{X} \mathbf{Q} \mathbf{A} =  \mathbf{A} \bm{\Lambda}$$`
+
+  
+* `\(\mathbf{B}\)` contains the principal components ( `\(\mathbf{B}\tr\mathbf{D}\mathbf{B}=\mathbf{I}_r\)` ).
+* `\(\mathbf{A}\)` contains the principal axis ( `\(\mathbf{A}\tr\mathbf{Q}\mathbf{A}=\mathbf{I}_r\)` ).
+
+* `\(\mb{L}=\mb{X}\mb{Q}\mb{A}\)` contains the row scores (projection of the rows of `\(\mb{X}\)` onto the principal axes)
+* `\(\mb{C}=\mb{X}\tr\mb{D}\mb{B}\)` contains the column scores (projection of the columns of `\(\mb{X}\)` onto the principal components)
+ 
+   Maximization of:
+   
+   `\(Q(\mathbf{a})=\mathbf{a}\tr\mathbf{Q}\tr\mathbf{X}\tr \mathbf{DXQa} = \lambda\)` and  `\(S(\mathbf{b})=\mathbf{b}\tr\mathbf{D}\tr\mathbf{XQX}\tr\mathbf{Db}=\lambda\)`
+   
+   `$$\left\langle {\mathbf{XQa}} | \mathbf{k} \right\rangle _\mathbf{D}=\left\langle {\mathbf{X}^t\mathbf{Db}} | \mathbf{a} \right\rangle _\mathbf{Q} = \sqrt{\lambda}$$`
+---
+# Implementation in `ade4`
+Computations are performed by the function `as.dudi`. This functions takes 3 arguments defining the statistical triplet and returns an object of class `dudi` that contains:
+
+| `ade4`  | theory | Definition|
+|-----------------------------------|----------------------------------------------|---|
+| `tab`                      | `\(\mathbf{X}\)`                                 | (transformed) data table  |
+| `cw`                       | `\(\mathbf{Q}\)`                                 | inner product for rows    |
+| `lw`                       | `\(\mathbf{D}\)`                                 | inner product for columns |
+|-------|----------|----------------------------------------|
+| `eig`                      | `\(\bm{\Lambda}\)`                               | eigenvalues               |
+| `l1`                       | `\(\mathbf{B}\)`                                 | principal components      |
+| `c1`                       | `\(\mathbf{A}\)`                                 | principal axes            |
+| `li`                       | `\(\mathbf{L}\)`                                 | row scores                |
+| `co`                       | `\(\mathbf{C}\)`                                 | column scores             |
+
+---
+# From the theory
 
 &lt;img src="img/viewpoints.png" width="30%" style="display: block; margin: auto;" /&gt;
 
@@ -156,7 +255,7 @@ $$
 
 ]
 ---
-# The `dudi` class in `ade4`
+# To the practice in `ade4`
 &lt;img src="img/viewpoints.png" width="30%" style="display: block; margin: auto;" /&gt;
 
 .pull-left[
@@ -214,45 +313,73 @@ $$
 * `reconst`
 * `dist.dudi`
 ---
-# Implementaion in `ade4`
+# User-level functions
 
 * The `as.dudi` function is an internal function
-
-* It takes three arguments and returns an object of class `dudi`
 
 * It is called by user-friendly functions corresponding to different analyses
 
 * It can be used by experimented users to define their own analysis
+
+
+```r
+library(ade4)
+apropos("dudi.")
+```
+
+```
+##  [1] "dudi.acm"       "dudi.coa"      
+##  [3] "dudi.dec"       "dudi.fca"      
+##  [5] "dudi.fpca"      "dudi.hillsmith"
+##  [7] "dudi.mix"       "dudi.nsc"      
+##  [9] "dudi.pca"       "dudi.pco"      
+## [11] "dudi.type"
+```
 ---
-# Module 1
+# Available methods
 
-.left-column[
-&lt;img src="img/onetable.png" width="156" style="display: block; margin: auto;" /&gt;
-]
+Different definitions of a statistical triplet correspond to different methods
 
-.right-column[
-* Environmental variables 
-  - Quantitative variables
-      &amp;rarr; Principal Component Analysis (`dudi.pca`)
-  - Categorical variables
-    &amp;rarr; Multiple Correspondence Analysis (`dudi.acm`)
-  - Mix of both
-&amp;rarr; Hill-Smith Analysis (`dudi.hillsmith`)
+| Function name  | Analysis name                         |
+|----------------|---------------------------------------|
+| dudi.pca       | Principal component analysis          |
+| dudi.pco       | Principal coordinate analysis         |
+| dudi.coa       | Correspondence analysis               |
+| dudi.acm       | Multiple correspondence analysis      |
+| dudi.dec       | Decentered correspondence analysis    |
+| dudi.fca       | Fuzzy correspondence analysis         |
+| dudi.fpca      | Fuzzy PCA                             |
+| dudi.mix       | Mixed nalysis                   |
+| dudi.hillsmith | Hill-Smith analysis |
+| dudi.nsc       | Non-symmetric correspondence analysis |
 
-* Species table
-  - Contingency table
-      &amp;rarr; Correspondence Analysis (`dudi.coa`)
-  - Distance matrix
-      &amp;rarr; Principal Coordinates Analysis (`dudi.pco`)
-]
 ---
-# Packages
+# Graphical functions
 
-* `ade4` to run the analyses
+* Outputs of multivariate methods are usually provided as plots
+* `ade4` contains several graphical functions
+* they have been re-implemented in a much more flexible way in the package `adegraphics`
 
-* `adegraphics` to represent results
+A comprehensive overview of the package is available in its vignette available [online](https://cran.r-project.org/web/packages/adegraphics/vignettes/adegraphics.html) or in R by:
 
-* `rgl` to understand multivariate methods in interactive 3D
+
+```r
+vignette("adegraphics")
+```
+
+See also the paper published in the R Journal  [here](https://journal.r-project.org/archive/2017/RJ-2017-042/index.html)
+---
+# The ade packages
+
+* `adegraphics`: S4-lattice based multivariate graphics
+* `adespatial`: spatial multiscale multivariate analysis
+* `adiv`: analysis of diversity
+* `adehabitat`: analysis of habitat selection by animals
+* `adegenet`: classes and methods for the multivariate analysis of
+genetic markers
+* `adephylo`: exploratory analyses for the phylogenetic comparative
+method
+* `ade4TkGUI`: graphical interface 
 ---
 # ade4TkGUI
 
@@ -261,6 +388,8 @@ $$
 # Resources
 .pull-left[
 &lt;img src="img/book.png" width="204" style="display: block; margin: auto;" /&gt;
+
+https://www.springer.com/fr/book/9781493988488
 ]
 
 .pull-right[
