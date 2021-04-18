@@ -14,11 +14,11 @@ The directory contains the material for the first four sessions (course
 and practical). The last session is designed for open discussion and
 personal work. The structure of this compendium is as follows:
 
-  - [:file\_folder: course](/course): Source (R Markdown) to reproduce
+  - [:file\_folder: course](course): Source (R Markdown) to reproduce
     the slides of the course. It contains also rendered versions (html
     and pdf documents) suitable for reading (the code is replaced by
     figures and tables in these files)
-  - [:file\_folder: practical](/practical): Source and rendered versions
+  - [:file\_folder: practical](practical): Source and rendered versions
     of the slides. Corrections of practical are provided as R codes to
     reproduce the different analyses
 
@@ -67,7 +67,7 @@ After unzipping:
 Please cite this document as:
 
 > Dray, S. (2021). Training in ade4 in R - Module I: Basic methods .
-> Accessed 16 avril 2021. Online at
+> Accessed 18 avril 2021. Online at
 > <https://github.com/sdray/LausanneBasic/>
 
 ### Licenses
@@ -88,7 +88,7 @@ We welcome contributions from everyone.
 
 ``` r
 utils::sessionInfo()
-#> R version 4.0.4 (2021-02-15)
+#> R version 4.0.5 (2021-03-31)
 #> Platform: x86_64-pc-linux-gnu (64-bit)
 #> Running under: Ubuntu 20.04.2 LTS
 #> 
@@ -108,7 +108,7 @@ utils::sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] compiler_4.0.4    magrittr_2.0.1    tools_4.0.4       htmltools_0.5.1.1
+#>  [1] compiler_4.0.5    magrittr_2.0.1    tools_4.0.5       htmltools_0.5.1.1
 #>  [5] yaml_2.2.1        stringi_1.5.3     rmarkdown_2.7     knitr_1.31       
 #>  [9] stringr_1.4.0     xfun_0.22         digest_0.6.27     rlang_0.4.10     
 #> [13] evaluate_0.14

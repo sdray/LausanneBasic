@@ -1,5 +1,7 @@
 ---
-output: github_document
+output:
+  github_document:
+    keep_html: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -25,8 +27,8 @@ This repository contains the material for the course *`r Title`*.
 
 The directory contains the material for the first four sessions (course and practical). The last session is designed for open discussion and personal work. The structure of this compendium is as follows:
 
-  - [:file\_folder: course](/course): Source (R Markdown) to reproduce the slides of the course. It contains also rendered versions (html and pdf documents) suitable for reading (the code is replaced by figures and tables in these files)
-  - [:file\_folder: practical](/practical): Source and rendered versions of the slides. Corrections of practical are provided as R codes to reproduce the different analyses
+  - [:file\_folder: course](course): Source (R Markdown) to reproduce the slides of the course. It contains also rendered versions (html and pdf documents) suitable for reading (the code is replaced by figures and tables in these files)
+  - [:file\_folder: practical](practical): Source and rendered versions of the slides. Corrections of practical are provided as R codes to reproduce the different analyses
 
 ## Program
 * **Session 1**: Welcome, presentation of participants. Introduction, packages installation. Theory and 3D explanation of multivariate methods.
