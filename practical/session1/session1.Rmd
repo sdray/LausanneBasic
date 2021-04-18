@@ -1,0 +1,191 @@
+---
+title: "Training in ade4 in R - Module I: Basic methods"
+subtitle: "Practical 1: understanding multivariate methods in 3D"  
+author: "Stéphane Dray"
+date: '`r Sys.Date()`'
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css:  [custom.css, xaringan-themer.css] 
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    includes:
+            before_body: preamble.tex
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(tidy=TRUE, tidy.opts=list(width.cutoff=50), fig.height= 4, fig.width=4, dev='svg', fig.align="center", fig.path = "fig/")
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+style_duo(primary_color = "#1F4257", secondary_color = "#F97B64", table_row_even_background_color = "#1F4257")
+```
+
+```{r rgl-plot, include = FALSE}
+library(rgl)
+knitr::knit_hooks$set(webgl = hook_webgl)
+```
+---
+# Introduction
+
+In this practical we will try to understand the main principles of multivariate methods by interactive representation in 3 dimensions using the `rgl` package
+
+First, load the required packages:
+
+```{r load-pkg, message = FALSE}
+library(ade4)
+library(rgl)
+```
+
+and then the data set `doubs` available in `ade4`
+
+```{r}
+data(doubs)
+```
+---
+# Data
+
+The data set contains information on 30 sites sampled on the Doubs river:
+
+- Measurments of 11 environmental variables in `$env`
+- Abundances of 27 fish species in `$fish`
+- Spatial coordinates of the sites in `$xy`
+
+More details? Try `?doubs`
+
+Select 3 environmental variables for this practical and define a vector to color the different sites:
+
+```{r}
+tab <- doubs$env[,c(3,8,10)]
+color <- rainbow(30, alpha = 0.5)
+```
+---
+# Representing data: space of individuals
+
+Load some utilities functions available in the R directory and plot the original data:
+
+
+```{r plot-sim, eval=FALSE}
+source("../../R/3D-utils.R")
+plot3d(tab, type = "s", col = color)
+```
+
+.pull-left[
+```{r plot-sim-out, message = FALSE, ref.label="plot-sim", echo=FALSE, fig.dim=c(4, 4), webgl=TRUE}
+```
+]
+
+.pull-right[
+* Our aim it to rotate the cloud to have the best viewpoint on the data.
+* How can you charachterize this viewpoint?
+* Look at scales!
+]
+---
+This representation does not use the same scaling for variables due to the differences in ranges:
+
+```{r, results='hide'}
+summary(tab)
+```
+
+The same representation with iso-scaling:
+```{r, eval = FALSE}
+lims <- 1.1 * c(min(tab),max(tab))
+plot3d(tab, type = "s", col = color, xlim = lims, ylim = lims, zlim = lims)
+```
+
+* What is the problem?
+
+* How to solve it?
+---
+Data are in different units. Main variations are mainly driven by differences in variances. Standardization is required.
+
+Center the data and see which geometric operation is induced:
+
+```{r, eval = FALSE}
+## centring
+tab.c <- scale(tab, center = TRUE, scale = FALSE)
+myplot3d(tab.c, colpoints = color, colaxes = 'black')
+summary(tab.c)
+```
+
+Scale the data and see which geometric operation is induced:
+```{r, eval = FALSE}
+## scaling
+tab.sc <- scale(tab, center = TRUE, scale = TRUE)
+myplot3d(tab.sc, colpoints = color, colaxes = 'black')
+```
+
+Rotate and find the best viewpoint.
+---
+# Principal component analysis
+
+Draw the principal axes
+
+```{r, eval = FALSE}
+pca <- dudi.pca(tab, nf = 3, scannf = FALSE) 
+addvar3d(t(pca$c1), col = 'red')
+```
+
+and project the sites on the principal axes
+
+```{r, eval = FALSE}
+## first PCA axis
+for(i in 1:nrow(pca$tab))
+  segments3d(rbind(pca$c1[,1] * pca$li[i,1], tab.sc[i,]), col = color[i], lty = 3)
+
+## second PCA axis
+for(i in 1:nrow(pca$tab))
+    segments3d(rbind(pca$c1[,2] * pca$li[i,2], tab.sc[i,]), col = color[i])
+```
+---
+Lastly, we can use the principal axes as a new system of coordinates and represent the data in this new system
+
+```{r, eval = FALSE}
+open3d()
+myplot3d(pca$li, colpoints = color, colaxes = 'black')
+addvar3d((pca$c1), col = 'red')
+```
+---
+# Space of variables
+
+The same approach can be used to search for the best representation of variables. 
+
+```{r, eval = FALSE}
+tab2 <- doubs$env[c(1,11,27),]
+tab2.sc <- t(scale(doubs$env[c(1,11,27),]))
+color.var <- rainbow(11)
+myplot3d2(tab2.sc, colarrows = color.var, colaxes = 'black')
+
+## add PCA axes
+pca2 <- dudi.pca(tab2, nf = 3, scannf = FALSE) 
+addvar3d(t(pca2$l1), col = 'red')
+```
+
+.center[
+[Go back to course 1](../../course/session1/session1.html#12)
+
+]
+---
+# PCA by hand
+
+Use matrix algebra and the functions `cor`, `%*%` and `eigen` to recompute the outputs of PCA by hand
+
+```{r, echo = FALSE, eval = FALSE}
+eig <- eigen(cor(tab))
+all.equal(eig$values, pca$eig)
+all.equal(eig$vectors[,1:3], as.matrix(pca$c1), check.attributes = FALSE)
+row.coord <- as.matrix(pca$tab) %*% eig$vectors[,1:3]
+all.equal(as.matrix(pca$li), row.coord, check.attributes = FALSE)
+```
+
+**Bonus**: Perform the singular value decomposition (function `svd`) of the standardized table (`scalewt(tab)`) and compare to the outputs of PCA
+
+
+.center[
+[Go back to course 1](../../course/session1/session1.html#18)
+
+]
