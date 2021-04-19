@@ -1,0 +1,155 @@
+---
+title: "Training in ade4 in R - Module I: Basic methods"
+subtitle: "Principal component analysis"  
+author: "Stéphane Dray"
+date: '`r Sys.Date()`'
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css:  [custom.css, xaringan-themer.css] 
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    includes:
+            before_body: preamble.tex
+params:
+  correction: FALSE
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(tidy=TRUE, tidy.opts=list(width.cutoff=50), fig.height= 4, fig.width=4, dev='svg', fig.align="center", fig.path = "fig/")
+```
+
+```{r correction, include = FALSE}
+res.correction <- ifelse(params$correction, "markup", "hide")
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+style_duo(primary_color = "#1F4257", secondary_color = "#F97B64", table_row_even_background_color = "#1F4257")
+```
+
+---
+# Data
+
+We will analyze the `doubs` data set described (see `?doubs`)
+
+```{r}
+library(ade4)
+library(adegraphics)
+data(doubs)
+names(doubs)
+names(doubs$env)
+```
+---
+# Some general information
+
+```{r}
+env <- doubs$env
+apply(env, 2, range)
+```
+---
+# Display the data
+
+```{r}
+table.value(scale(env), symbol = "circle")
+```
+---
+# Spatial information
+
+```{r, out.width="40%"}
+xy <- doubs$xy
+sl1 <- s.label(xy, ppoints.cex = 0, plot = FALSE)
+st1 <- s.traject(xy, ppoints.cex = 0, plabels.cex = 0, plot = FALSE)
+s1 <- superpose(st1, sl1, plot = TRUE)
+```
+---
+# Map one variable
+
+```{r}
+s.value(xy, doubs$env[,1])
+```
+---
+# Map the different variables
+
+```{r}
+mypal <- colorRampPalette(c("#EDF8FB", "#006D2C"))
+s.value(xy, doubs$env, pgrid.draw = FALSE, porigin.draw = FALSE,
+    plegend.drawKey = FALSE, psub.cex = 2, method = "color",
+    symbol = "circle", ppalette.quanti = mypal, ppoints.cex = 0.5)
+```
+---
+# Perform the PCA
+
+Must we scale or not the data?
+
+```{r, echo = params$correction, results=res.correction}
+pca1 <- dudi.pca(env, scale = TRUE, scannf = FALSE, nf = 2)
+```
+---
+# How many axes?
+
+Choosing the number of dimensions that can be interpreted is an open question. Several methods have been proposed in the literature. Using your eyes to detect breaks in eigenvalue decrease is probably the best method.
+
+However, `ade4` proposes one method developed for the case of PCA on scaled data. You can try it:
+
+```{r}
+testdim(pca1)$nb.cor
+```
+---
+# Display eigenvalues
+
+* Make a barplot of eigenvalues
+* Compute the percentage of variation explained by each dimension
+* Compare to the results obtained by the function `summary`
+
+```{r, include = params$correction, echo = params$correction, results=res.correction, out.width="30%"}
+round(pca1$eig / sum(pca1$eig) * 100, 2)
+screeplot(pca1, main = "PCA Eigenvalues")
+```
+---
+# Graphical representation of PCA results
+
+* Plot the variable scores with a correlation circle
+* Plot the site scores on a separate plot
+* Interpret
+
+```{r, fig.dim=c(4,2), include = params$correction, echo = params$correction, results=res.correction}
+sc1 <- s.corcircle(pca1$co, plot = FALSE)
+sl1 <- s.label(pca1$li, plabels.optim = TRUE, ppoints.cex = 0.5, plot = FALSE)
+ADEgS(list(sc1, sl1))
+```
+---
+# PCA scores on the geographical map
+
+* Draw maps of PCA scores on the first two axes
+* Interpret the maps to describe the environmental structure of the river
+
+```{r, fig.dim=c(4,2), include = params$correction, echo = params$correction, results=res.correction}
+s.value(xy, pca1$li[, 1:2], pgrid.draw = FALSE, porigin.draw = FALSE,
+    method = "size", symbol = "circle", col = mypal(2),
+    ppoints.cex = 1)
+```
+---
+# A look to variables
+
+* Compute the correlations between original variables and PCA axes
+* In which elmement of PCA outputs are stored these values
+
+
+```{r, echo = params$correction, results=res.correction}
+cor(pca1$l1, doubs$env)
+head(pca1$co)
+```
+---
+# A look to variables
+
+The generic function `score` provides an optimal representation of the maximized criteria
+
+```{r, fig.dim=c(5,3.9)}
+score(pca1)
+```
+
+

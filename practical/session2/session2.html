@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Training in ade4 in R - Module I: Basic methods</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Stéphane Dray" />
+    <meta name="date" content="2021-04-19" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Training in ade4 in R - Module I: Basic methods
+## Principal component analysis
+### Stéphane Dray
+### 2021-04-19
+
+---
+
+$$
+%center text/code
+\newcommand{\bcenter}{\begin{center}}
+\newcommand{\ecenter}{\end{center}}
+$$
+
+$$
+\newcommand{\bm}[1]{\boldsymbol{\mathbf{#1}}}
+\newcommand{\tr}{\hspace{-0.05cm}^{\top}\hspace{-0.05cm}}% transpose d'une matrice
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\pt}{\mathsmaller \bullet}% petit point pour les indices
+$$
+
+
+$$
+\newcommand{\triplet}[3]{
+% pour ecrire un triplet dans le texte
+$\left ( #1, #2, #3 \right )$
+}
+$$
+
+$$
+\newcommand{\sqnorm}[2]{
+%norme au carré
+\lVert  #1 \rVert^2_{#2}
+}
+$$
+
+$$
+\newcommand{\norm}[2]{
+%norme
+ \lVert #1 \rVert_{#2}
+}
+$$
+
+
+
+
+
+
+
+---
+# Data
+
+We will analyze the `doubs` data set described (see `?doubs`)
+
+
+```r
+library(ade4)
+library(adegraphics)
+data(doubs)
+names(doubs)
+```
+
+```
+## [1] "env"     "fish"    "xy"      "species"
+```
+
+```r
+names(doubs$env)
+```
+
+```
+##  [1] "dfs" "alt" "slo" "flo" "pH"  "har" "pho" "nit" "amm" "oxy" "bdo"
+```
+---
+# Some general information
+
+
+```r
+env &lt;- doubs$env
+apply(env, 2, range)
+```
+
+```
+##       dfs alt   slo  flo pH har pho nit amm oxy bdo
+## [1,]    3 172 1.099   84 77  40   1  15   0  41  13
+## [2,] 4530 934 6.176 6900 86 110 422 620 180 124 167
+```
+---
+# Display the data
+
+
+```r
+table.value(scale(env), symbol = "circle")
+```
+
+&lt;img src="fig/unnamed-chunk-3-1.svg" style="display: block; margin: auto;" /&gt;
+---
+# Spatial information
+
+
+```r
+xy &lt;- doubs$xy
+sl1 &lt;- s.label(xy, ppoints.cex = 0, plot = FALSE)
+st1 &lt;- s.traject(xy, ppoints.cex = 0, plabels.cex = 0, 
+    plot = FALSE)
+s1 &lt;- superpose(st1, sl1, plot = TRUE)
+```
+
+&lt;img src="fig/unnamed-chunk-4-1.svg" width="40%" style="display: block; margin: auto;" /&gt;
+---
+# Map one variable
+
+
+```r
+s.value(xy, doubs$env[, 1])
+```
+
+&lt;img src="fig/unnamed-chunk-5-1.svg" style="display: block; margin: auto;" /&gt;
+---
+# Map the different variables
+
+
+```r
+mypal &lt;- colorRampPalette(c("#EDF8FB", "#006D2C"))
+s.value(xy, doubs$env, pgrid.draw = FALSE, porigin.draw = FALSE, 
+    plegend.drawKey = FALSE, psub.cex = 2, method = "color", 
+    symbol = "circle", ppalette.quanti = mypal, ppoints.cex = 0.5)
+```
+
+&lt;img src="fig/unnamed-chunk-6-1.svg" style="display: block; margin: auto;" /&gt;
+---
+# Perform the PCA
+
+Must we scale or not the data?
+
+
+---
+# How many axes?
+
+Choosing the number of dimensions that can be interpreted is an open question. Several methods have been proposed in the literature. Using your eyes to detect breaks in eigenvalue decrease is probably the best method.
+
+However, `ade4` proposes one method developed for the case of PCA on scaled data. You can try it:
+
+
+```r
+testdim(pca1)$nb.cor
+```
+
+```
+## [1] 2
+```
+---
+# Display eigenvalues
+
+* Make a barplot of eigenvalues
+* Compute the percentage of variation explained by each dimension
+* Compare to the results obtained by the function `summary`
+
+
+---
+# Graphical representation of PCA results
+
+* Plot the variable scores with a correlation circle
+* Plot the site scores on a separate plot
+* Interpret
+
+
+---
+# PCA scores on the geographical map
+
+* Draw maps of PCA scores on the first two axes
+* Interpret the maps to describe the environmental structure of the river
+
+
+---
+# A look to variables
+
+* Compute the correlations between original variables and PCA axes
+* In which elmement of PCA outputs are stored these values
+
+
+
+---
+# A look to variables
+
+The generic function `score` provides an optimal representation of the maximized criteria
+
+
+```r
+score(pca1)
+```
+
+&lt;img src="fig/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
