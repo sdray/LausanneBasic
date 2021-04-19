@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Training in ade4 in R - Module I: Basic methods</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Stéphane Dray" />
+    <meta name="date" content="2021-04-19" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Training in ade4 in R - Module I: Basic methods
+## Principal component analysis
+### Stéphane Dray
+### 2021-04-19
+
+---
+
+$$
+%center text/code
+\newcommand{\bcenter}{\begin{center}}
+\newcommand{\ecenter}{\end{center}}
+$$
+
+$$
+\newcommand{\bm}[1]{\boldsymbol{\mathbf{#1}}}
+\newcommand{\tr}{\hspace{-0.05cm}^{\top}\hspace{-0.05cm}}% transpose d'une matrice
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\pt}{\mathsmaller \bullet}% petit point pour les indices
+$$
+
+
+$$
+\newcommand{\triplet}[3]{
+% pour ecrire un triplet dans le texte
+$\left ( #1, #2, #3 \right )$
+}
+$$
+
+$$
+\newcommand{\sqnorm}[2]{
+%norme au carré
+\lVert  #1 \rVert^2_{#2}
+}
+$$
+
+$$
+\newcommand{\norm}[2]{
+%norme
+ \lVert #1 \rVert_{#2}
+}
+$$
+
+
+
+
+---
+# Data structure
+
+.left-column[
+&lt;img src="img/onetable.png" width="156" style="display: block; margin: auto;" /&gt;
+]
+
+.right-column[
+* One table with *p* variables measured on *n* individuals
+
+* All variables are **quantitative**
+
+* For instance
+    - sites `\(\times\)` environmental variables
+    - species `\(\times\)` traits
+    - individuals `\(\times\)` alleles
+    - populations `\(\times\)` alleles
+]
+---
+# Objectives
+
+* Identify what is the main information contained in the table
+
+  - Identify which variables are the most linked
+  - Identify the principal differences/similarities between individuals
+---
+# Data
+
+We consider the `meaudret` data set
+
+
+```r
+library(ade4)
+data(meaudret)
+names(meaudret)
+```
+
+```
+## [1] "env"       "design"    "spe"       "spe.names"
+```
+
+```r
+dim(meaudret$env)
+```
+
+```
+## [1] 20  9
+```
+
+```r
+names(meaudret$env)
+```
+
+```
+## [1] "Temp" "Flow" "pH"   "Cond" "Bdo5" "Oxyd" "Ammo" "Nitr" "Phos"
+```
+---
+The data set contains an environmental table with 20 measurements of 9 environmental variables. The measurements have been made in 6 sites at each season along a small French stream (see `?meaudret`)
+
+
+```r
+head(meaudret$design)
+```
+
+```
+##      season site
+## sp_1 spring   S1
+## sp_2 spring   S2
+## sp_3 spring   S3
+## sp_4 spring   S4
+## sp_5 spring   S5
+## su_1 summer   S1
+```
+
+We want to know
+
+* what are the main environmental gradients, i.e., which variables co-vary (if any)
+* which samples have similar/different environmental conditions 
+---
+# Principal component analysis
+
+* `\(\mathbf{X}\)` contains centred or scaled variables
+
+* `\(\mathbf{Q} = \mathbf{I}_p\)` is the identity matrix (diagonal matrix with 1s)
+
+* `\(\mathbf{D} = \frac{1}{n}\mathbf{I}_n\)` is the diagonal matrix with `\(\frac{1}{n}\)`
+
+
+.column-left[
+&lt;img src="img/onetable.png" width="156" style="display: block; margin: auto;" /&gt;
+]
+
+.column-center[
+
+.center[
+`dudi.pca`
+
+&lt;img src="img/arrow.png" width="131" style="display: block; margin: auto;" /&gt;
+]
+]
+
+.column-right[
+&lt;img src="img/pca-map.png" width="353" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Maximized criteria
+
+* For individuals
+
+$$ Q(\mathbf{a})=\sqnorm{\mathbf{XQa}}{\mb{D}} = \sqnorm{\mathbf{Xa}}{\frac{1}{n}\mb{I}_n} = var(\mathbf{Xa})= \lambda
+$$
+
+* For variables
+
+  - Centred data ( `\(x_{ij} - \bar{x}_j\)` )
+`$$S(\mathbf{b})=\sqnorm{\mathbf{X}\tr\mathbf{Db}}{\mb{Q}} =\sqnorm{\frac{1}{n}\mathbf{X}\tr\mathbf{b}}{\mb{I}_p} = \sum_{j=1}^p{cov^2(\mathbf{x}_j, \mathbf{b})} = \lambda$$`
+
+  - Scaled data  ( `\((x_{ij} - \bar{x}_j) / s_j\)`  )
+`$$S(\mathbf{b})=\sqnorm{\mathbf{X}\tr\mathbf{Db}}{\mb{Q}} =\sqnorm{\frac{1}{n}\mathbf{X}\tr\mathbf{b}}{\mb{I}_p} = \sum_{j=1}^p{cor^2(\mathbf{x}_j, \mathbf{b})} = \lambda$$`
+
+---
+# The `dudi.pca` function
+## Arguments
+
+
+```r
+args(dudi.pca)
+```
+
+```
+## function (df, row.w = rep(1, nrow(df))/nrow(df), col.w = rep(1, 
+##     ncol(df)), center = TRUE, scale = TRUE, scannf = TRUE, nf = 2) 
+## NULL
+```
+* `df` is a `data.frame` with the data
+* `row.w` and `col.w` are optional vectors of weights
+* `center` and `scale` define the standardization of the data
+* `scannf` and `nf` allow to set the number of dimensions to interpret
+
+
+```r
+pca.meau &lt;- dudi.pca(meaudret$env, scannf = FALSE)
+```
+---
+## Returned values
+
+
+```r
+names(pca.meau)
+```
+
+```
+##  [1] "tab"  "cw"   "lw"   "eig"  "rank" "nf"   "c1"   "li"   "co"   "l1"  
+## [11] "call" "cent" "norm"
+```
+It returns an object of class `dudi` containing:
+
+- `$eig`: eigenvalues ( `\(\mb{\Lambda}\)` )
+- `$cw`: column weights ( `\(\mb{Q}=\mb{I}_p\)` )
+- `$lw`: row weights ( `\(\mb{D}=\frac{1}{n}\mb{I}_n\)` )
+- `$tab`: transformed data table ( `\(\mb{X}\)` )
+- `$c1`: principal axes or variable loadings ( `\(\mb{A}\)` )
+- `$li`: row scores ( `\(\mb{L}=\mathbf{XA}\)` )
+- `$l1`: principal components ( `\(\mb{B}\)` )
+- `$co`: column scores ( `\(\mb{C}=\frac{1}{n}\mb{X}\tr\mb{B}\)` )
+---
+# Graphical representation and interpretation
+
+As we have *two* analyses (individuals and variables spaces), two representations can be defined:
+* **distance biplot** where `\(\mb{A}\)` and `\(\mb{L}=\mathbf{XA}\)` (`$c1`, `$li`) are superimposed.
+* **correlation biplot** where `\(\mb{B}\)` and `\(\mb{C}=\frac{1}{n}\mb{X}\tr\mb{B}\)` (`$l1`, `$co`) are superimposed.
+
+In the first interpretation, PCA finds coefficients for variables (`$c1`) to compute a linear combination (`$li`) that provides an ordination of individuals with the greatest dispersion (maximum variance). 
+
+In the second interpretation, PCA provides a linear combination (`$l1`) that maximise the correlations (`$co`) with all variables (or covariances for centred PCA). Hence, it is the best summary of the variables.
+---
+## The `biplot` function
+
+
+```r
+library(adegraphics)
+```
+
+.pull-left[
+
+```r
+biplot(pca.meau)
+```
+
+&lt;img src="fig/unnamed-chunk-11-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+```r
+biplot(pca.meau, permute = TRUE)
+```
+
+&lt;img src="fig/unnamed-chunk-12-1.svg" style="display: block; margin: auto;" /&gt;
+]
+---
+## Separate representations
+
+.pull-left[
+
+```r
+s.label(pca.meau$li)
+```
+
+&lt;img src="fig/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+
+```r
+s.arrow(pca.meau$co)
+```
+
+&lt;img src="fig/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" /&gt;
+]
+---
+## Separate representations
+
+.pull-left[
+
+```r
+s.label(pca.meau$li)
+```
+
+&lt;img src="fig/unnamed-chunk-15-1.svg" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+
+```r
+s.corcircle(pca.meau$co)
+```
+
+&lt;img src="fig/unnamed-chunk-16-1.svg" style="display: block; margin: auto;" /&gt;
+]
+---
+## Separate representations
+
+.pull-left[
+
+```r
+s.class(pca.meau$li, meaudret$design[, 1], col = TRUE)
+```
+
+&lt;img src="fig/unnamed-chunk-17-1.svg" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+
+```r
+s.arrow(pca.meau$co)
+```
+
+&lt;img src="fig/unnamed-chunk-18-1.svg" style="display: block; margin: auto;" /&gt;
+]
+---
+# To scale or not to scale
+
+
+Scaling should be performed when we do not want that differences in variances affect the results
+
+
+```r
+pca.meau.c &lt;- dudi.pca(meaudret$env, scannf = FALSE, 
+    scale = FALSE)
+```
+
+.pull-left[
+&lt;img src="fig/unnamed-chunk-20-1.svg" width="70%" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="fig/unnamed-chunk-21-1.svg" width="70%" style="display: block; margin: auto;" /&gt;
+
+]
+
+In our case, we must scale the data as differences in variances are mainly due to differences in units
+---
+# Inertia statistics
+
+
+```r
+summary(pca.meau)
+```
+
+```
+## Class: pca dudi
+## Call: dudi.pca(df = meaudret$env, scannf = FALSE)
+## 
+## Total inertia: 9
+## 
+## Eigenvalues:
+##     Ax1     Ax2     Ax3     Ax4     Ax5 
+##  5.1747  1.3204  1.0934  0.7321  0.4902 
+## 
+## Projected inertia (%):
+##     Ax1     Ax2     Ax3     Ax4     Ax5 
+##  57.497  14.671  12.149   8.135   5.447 
+## 
+## Cumulative projected inertia (%):
+##     Ax1   Ax1:2   Ax1:3   Ax1:4   Ax1:5 
+##   57.50   72.17   84.32   92.45   97.90 
+## 
+## (Only 5 dimensions (out of 9) are shown)
+```
+---
+# PCA in practice
+
+.center[
+
+[Go to practical 2](../../practical/session2/session2.html)
+
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
