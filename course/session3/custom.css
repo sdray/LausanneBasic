@@ -1,0 +1,51 @@
+.column-left {
+  float: left;
+  width: 33.333%;
+}
+
+.column-right {
+  float: right;
+  width: 33.333%;
+}
+
+.column-center {
+  display: inline-block;
+  width: 33.333%;
+}
+
+.citation{
+  display: block;
+  color: #F97B64;
+  text-align: right;
+  font-size: 0.8rem;
+}
+
+.blackbox {
+  padding: 0.3em;
+  background: #2e6180;
+  color: white;
+  border: 2px solid #F97B64;
+  border-radius: 10px;
+}
+
+
+.highbox {
+  padding: 0.3em;
+  background: #2e6180;
+  color: #F97B64;
+  border: 2px solid #F97B64;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.left-code {
+  width: 38%;
+  height: 92%;
+  float: left;
+}
+.right-plot {
+  width: 60%;
+  float: right;
+  padding-left: 1%;
+}
+

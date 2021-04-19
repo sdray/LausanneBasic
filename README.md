@@ -41,17 +41,25 @@ personal work. The structure of this compendium is as follows:
         \[[html](practical/session2/session2-corrected.html)|[pdf](practical/session2/session2-corrected.pdf)\]
   - **Session 3**: Analysis of environmental data: Multiple
     Correspondence Analysis. Hill-Smith Analysis
-      - Course \[Rmd|html|pdf\]
-      - Practical \[Rmd|html|pdf\]
+      - Course
+        \[[html](course/session3/session3.html)|[pdf](course/session3/session3.pdf)|[Rmd](course/session3/session3.Rmd)\]
+      - Practical
+        \[[html](practical/session3/session3.html)|[pdf](practical/session3/session3.pdf)|[Rmd](practical/session3/session3.Rmd)\]
+        / Correction
+        \[[html](practical/session3/session3-corrected.html)|[pdf](practical/session3/session3-corrected.pdf)\]
   - **Session 4**:Analysis of species data: Correspondence Analysis and
     Principal Component Analysis. Principal Coordinates Analysis.
-      - Course \[Rmd|html|pdf\]
-      - Practical \[Rmd|html|pdf\]
+      - Course
+        \[[html](course/session4/session4.html)|[pdf](course/session4/session4.pdf)|[Rmd](course/session4/session4.Rmd)\]
+      - Practical
+        \[[html](practical/session4/session4.html)|[pdf](practical/session4/session4.pdf)|[Rmd](practical/session4/session4.Rmd)\]
+        / Correction
+        \[[html](practical/session4/session4-corrected.html)|[pdf](practical/session4/session4-corrected.pdf)\]
   - **Session 5**: Examples of use of multivariate analysis methods with
     ade4 in R. Group work and discussions on data sets presented by
     participants.
 
-## How to run in your broswer or download and run locally
+## How to run in your browser or download and run locally
 
 This course has been developed using the statistical programming
 language R. To work with the compendium, you will need installed on your
@@ -66,6 +74,10 @@ After unzipping:
   - open the `.Rproj` file in RStudio
   - source `make.R` file to compile the different documents of the
     course.
+
+An alternative is to use the following code in your R session:
+
+`usethis::use_course("sdray/LausanneBasic", destdir = "~/Bureau/")`
 
 ### How to cite
 
@@ -119,30 +131,30 @@ utils::sessionInfo()
 #> loaded via a namespace (and not attached):
 #>  [1] sass_0.3.1              pkgload_1.2.1           jsonlite_1.7.2         
 #>  [4] showtext_0.9-2          here_1.0.1              bslib_0.2.4            
-#>  [7] shiny_1.6.0             sp_1.4-5                highr_0.8              
-#> [10] latticeExtra_0.6-29     showtextdb_3.0          yaml_2.2.1             
-#> [13] remotes_2.3.0           progress_1.2.2          sessioninfo_1.1.1      
-#> [16] pillar_1.5.1            lattice_0.20-41         glue_1.4.2             
-#> [19] digest_0.6.27           manipulateWidget_0.10.1 RColorBrewer_1.1-2     
-#> [22] promises_1.2.0.1        websocket_1.3.2         htmltools_0.5.1.1      
-#> [25] httpuv_1.5.5            xaringan_0.20           pkgconfig_2.0.3        
-#> [28] devtools_2.4.0          servr_0.21              sysfonts_0.8.3         
-#> [31] purrr_0.3.4             xtable_1.8-4            webshot_0.5.2          
-#> [34] processx_3.5.1          whisker_0.4             jpeg_0.1-8.1           
-#> [37] later_1.1.0.1           tibble_3.1.0            usethis_2.0.1          
-#> [40] ellipsis_0.3.1          cachem_1.0.4            withr_2.4.1            
-#> [43] cli_2.4.0               magrittr_2.0.1          crayon_1.4.1           
-#> [46] mime_0.10               pagedown_0.13           memoise_2.0.0          
-#> [49] evaluate_0.14           ps_1.6.0                fs_1.5.0               
-#> [52] fansi_0.4.2             MASS_7.3-53.1           pkgbuild_1.2.0         
+#>  [7] shiny_1.6.0             assertthat_0.2.1        sp_1.4-5               
+#> [10] highr_0.8               latticeExtra_0.6-29     showtextdb_3.0         
+#> [13] emo_0.0.0.9000          yaml_2.2.1              remotes_2.3.0          
+#> [16] progress_1.2.2          sessioninfo_1.1.1       lattice_0.20-41        
+#> [19] glue_1.4.2              digest_0.6.27           manipulateWidget_0.10.1
+#> [22] RColorBrewer_1.1-2      promises_1.2.0.1        websocket_1.3.2        
+#> [25] htmltools_0.5.1.1       httpuv_1.5.5            xaringan_0.20          
+#> [28] pkgconfig_2.0.3         devtools_2.4.0          servr_0.21             
+#> [31] sysfonts_0.8.3          purrr_0.3.4             xtable_1.8-4           
+#> [34] webshot_0.5.2           processx_3.5.1          whisker_0.4            
+#> [37] jpeg_0.1-8.1            later_1.1.0.1           generics_0.1.0         
+#> [40] usethis_2.0.1           ellipsis_0.3.1          cachem_1.0.4           
+#> [43] withr_2.4.1             cli_2.4.0               magrittr_2.0.1         
+#> [46] crayon_1.4.1            mime_0.10               pagedown_0.13          
+#> [49] memoise_2.0.0           evaluate_0.14           ps_1.6.0               
+#> [52] fs_1.5.0                MASS_7.3-53.1           pkgbuild_1.2.0         
 #> [55] tools_4.0.5             prettyunits_1.1.1       hms_1.0.0              
 #> [58] formatR_1.8             lifecycle_1.0.0         stringr_1.4.0          
 #> [61] callr_3.6.0             packrat_0.5.0           compiler_4.0.5         
-#> [64] jquerylib_0.1.3         rlang_0.4.10            debugme_1.1.0          
-#> [67] grid_4.0.5              htmlwidgets_1.5.3       crosstalk_1.1.1        
-#> [70] miniUI_0.1.1.1          rmarkdown_2.7           testthat_3.0.2         
-#> [73] R6_2.5.0                knitr_1.31              fastmap_1.1.0          
-#> [76] utf8_1.2.1              rprojroot_2.0.2         KernSmooth_2.23-18     
-#> [79] desc_1.3.0              stringi_1.5.3           Rcpp_1.0.6             
-#> [82] vctrs_0.3.7             png_0.1-7               xfun_0.22
+#> [64] jquerylib_0.1.3         rlang_0.4.10            grid_4.0.5             
+#> [67] htmlwidgets_1.5.3       crosstalk_1.1.1         miniUI_0.1.1.1         
+#> [70] rmarkdown_2.7           testthat_3.0.2          R6_2.5.0               
+#> [73] lubridate_1.7.10        knitr_1.31              fastmap_1.1.0          
+#> [76] rprojroot_2.0.2         KernSmooth_2.23-18      desc_1.3.0             
+#> [79] stringi_1.5.3           Rcpp_1.0.6              vctrs_0.3.7            
+#> [82] png_0.1-7               xfun_0.22
 ```

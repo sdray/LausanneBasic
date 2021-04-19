@@ -1,0 +1,116 @@
+---
+title: "Training in ade4 in R - Module I: Basic methods"
+subtitle: "Multiple correspondence analysis"  
+author: "Stéphane Dray"
+date: '`r Sys.Date()`'
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css:  [custom.css, xaringan-themer.css] 
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    includes:
+            before_body: preamble.tex
+params:
+  correction: FALSE
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(tidy=TRUE, tidy.opts=list(width.cutoff=50), fig.height= 4, fig.width=4, dev='svg', fig.align="center", fig.path = "fig/")
+```
+
+```{r correction, include = FALSE}
+res.correction <- ifelse(params$correction, "markup", "hide")
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+style_duo(primary_color = "#1F4257", secondary_color = "#F97B64", table_row_even_background_color = "#1F4257")
+```
+
+---
+# Data
+
+We will analyze the `doubs` data set (see `?doubs`)
+
+```{r}
+library(ade4)
+library(adegraphics)
+data(doubs)
+names(doubs)
+names(doubs$env)
+```
+---
+# Tranformation into categorical variables
+
+```{r}
+fenv <- apply(doubs$env, 2, cut, breaks = 4, labels = 1:4)
+fenv <- as.data.frame(fenv, stringsAsFactors = TRUE)
+```
+---
+# Multiple Corrsepondence Analysis
+
+* Perform MCA
+* Display the barplot of eigenvalues
+
+```{r, out.width="30%", include = params$correction, echo = params$correction, results=res.correction}
+acm1 <- dudi.acm(fenv, scannf = FALSE)
+screeplot(acm1, main = " ", xlab = " ")
+```
+---
+# Graphical representation of MCA results
+
+* Plot the results using the `plot` function
+
+```{r, fig.dim=c(3.5, 3.5), include = params$correction, echo = params$correction, results=res.correction}
+plot(acm1, col = TRUE)
+```
+---
+# PCA scores on the geographical map
+
+* Draw maps of PCA scores on the first two axes
+* Interpret the maps to describe the environmental structure of the river
+
+```{r, fig.dim=c(4,2), include = params$correction, echo = params$correction, results=res.correction}
+mypal <- colorRampPalette(c("#EDF8FB", "#006D2C"))
+s.value(doubs$xy, acm1$li[, 1:2], pgrid.draw = FALSE, porigin.draw = FALSE,
+    method = "size", symbol = "circle", col = mypal(2),
+    ppoints.cex = 1)
+```
+---
+# A look to variables
+
+* Which variables are the most discriminated by the first axes
+
+
+```{r, echo = params$correction, results=res.correction}
+acm1$cr
+```
+---
+# A look to variables
+
+The generic function `score` provides an optimal representation of the maximized criteria
+
+```{r, fig.dim=c(5,3.9)}
+score(acm1, type = "boxplot")
+```
+---
+# Hill-Smith analysis
+
+* Build a table mixing quantitative and categorical variables
+```{r}
+menv <- cbind(fenv[, 1:6], doubs$env[, 7:11])
+```
+* Perform Hill-Smith analysis
+```{r, echo = params$correction, results=res.correction}
+hs1 <- dudi.hillsmith(menv, scannf = FALSE)
+```
+---
+# Graphical representation
+
+```{r, fig.dim=c(5,3.9)}
+score(hs1, type = "boxplot")
+```

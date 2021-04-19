@@ -38,15 +38,15 @@ The directory contains the material for the first four sessions (course and prac
     - Course [[html](course/session2/session2.html)|[pdf](course/session2/session2.pdf)|[Rmd](course/session2/session2.Rmd)]
     - Practical [[html](practical/session2/session2.html)|[pdf](practical/session2/session2.pdf)|[Rmd](practical/session2/session2.Rmd)] / Correction [[html](practical/session2/session2-corrected.html)|[pdf](practical/session2/session2-corrected.pdf)]
 * **Session 3**: Analysis of environmental data: Multiple Correspondence Analysis. Hill-Smith Analysis
-    - Course [Rmd|html|pdf]
-    - Practical [Rmd|html|pdf]
+    - Course [[html](course/session3/session3.html)|[pdf](course/session3/session3.pdf)|[Rmd](course/session3/session3.Rmd)]
+    - Practical [[html](practical/session3/session3.html)|[pdf](practical/session3/session3.pdf)|[Rmd](practical/session3/session3.Rmd)] / Correction [[html](practical/session3/session3-corrected.html)|[pdf](practical/session3/session3-corrected.pdf)]
 * **Session 4**:Analysis of species data: Correspondence Analysis and Principal Component Analysis. Principal Coordinates Analysis.
-    - Course [Rmd|html|pdf]
-    - Practical [Rmd|html|pdf]
+    - Course [[html](course/session4/session4.html)|[pdf](course/session4/session4.pdf)|[Rmd](course/session4/session4.Rmd)]
+    - Practical [[html](practical/session4/session4.html)|[pdf](practical/session4/session4.pdf)|[Rmd](practical/session4/session4.Rmd)] / Correction [[html](practical/session4/session4-corrected.html)|[pdf](practical/session4/session4-corrected.pdf)]
 * **Session 5**: Examples of use of multivariate analysis methods with ade4 in R. Group work and discussions on data sets presented by participants.
 
 
-## How to run in your broswer or download and run locally
+## How to run in your browser or download and run locally
 
 This course has been developed using the statistical programming
 language R. To work with the compendium, you will need
@@ -58,6 +58,10 @@ You can download the compendium as a zip from from this URL:
 
 - open the `.Rproj` file in RStudio
 - source `make.R` file to compile the different documents of the course.
+
+An alternative is to use the following code in your R session:
+
+`usethis::use_course("sdray/LausanneBasic", destdir = "~/Bureau/")`
 
 ### How to cite
 

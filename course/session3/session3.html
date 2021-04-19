@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Training in ade4 in R - Module I: Basic methods</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Stéphane Dray" />
+    <meta name="date" content="2021-04-19" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Training in ade4 in R - Module I: Basic methods
+## Multiple correspondence analysis
+### Stéphane Dray
+### 2021-04-19
+
+---
+
+$$
+%center text/code
+\newcommand{\bcenter}{\begin{center}}
+\newcommand{\ecenter}{\end{center}}
+$$
+
+$$
+\newcommand{\bm}[1]{\boldsymbol{\mathbf{#1}}}
+\newcommand{\tr}{\hspace{-0.05cm}^{\top}\hspace{-0.05cm}}% transpose d'une matrice
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\pt}{\mathsmaller \bullet}% petit point pour les indices
+$$
+
+
+$$
+\newcommand{\triplet}[3]{
+% pour ecrire un triplet dans le texte
+$\left ( #1, #2, #3 \right )$
+}
+$$
+
+$$
+\newcommand{\sqnorm}[2]{
+%norme au carré
+\lVert  #1 \rVert^2_{#2}
+}
+$$
+
+$$
+\newcommand{\norm}[2]{
+%norme
+ \lVert #1 \rVert_{#2}
+}
+$$
+
+
+
+
+---
+# Data structure
+
+.left-column[
+&lt;img src="img/onetable-Z.png" width="156" style="display: block; margin: auto;" /&gt;
+]
+
+.right-column[
+* One table with *p* variables measured on *n* individuals
+
+* All variables are **qualitative** (categorical)
+
+* For instance
+    - sites `\(\times\)` environmental variables (e.g., soil types)
+    - species `\(\times\)` traits (e.g., functional groups)
+]
+---
+# Objectives
+
+* Identify what is the main information contained in the table
+
+  - Identify which *categories* are the most linked
+  - Identify the principal differences/similarities between individuals
+---
+# Data
+
+We consider the `meaudret` data set
+
+
+```r
+library(ade4)
+data(meaudret)
+names(meaudret)
+```
+
+```
+## [1] "env"       "design"    "spe"       "spe.names"
+```
+
+```r
+dim(meaudret$env)
+```
+
+```
+## [1] 20  9
+```
+
+```r
+names(meaudret$env)
+```
+
+```
+## [1] "Temp" "Flow" "pH"   "Cond" "Bdo5" "Oxyd" "Ammo" "Nitr" "Phos"
+```
+---
+# Categorical variables
+
+The data set contains an environmental table with 20 measurements of 9 environmental variables. For this example, quantitative variables are transformed into categorical variables:
+
+
+```r
+env.categ &lt;- apply(meaudret$env, 2, cut, breaks = 3, 
+    labels = c("low", "med", "hi"))
+env.categ &lt;- as.data.frame(env.categ, stringsAsFactors = TRUE)
+head(env.categ, 3)
+```
+
+```
+##   Temp Flow pH Cond Bdo5 Oxyd Ammo Nitr Phos
+## 1  med  low hi  low  low  low  low  low  low
+## 2  med  low hi  low  low  med  low  low  low
+## 3  med  med hi  low  low  low  low  low  low
+```
+
+We want to know
+
+* what are the main environmental gradients, i.e., which variables co-vary (if any)
+* which samples have similar/different environmental conditions 
+---
+# Quantitative and categorical variables
+
+* Some variables are recorded as categorical
+* Quantitative variables can always be recoded as categorical ones
+  - 😥 This introduces a loss of information (different values are regrouped into a single category)
+  - 😄 It allows to detect non-linear relationships (order of categories is lost)
+  
+
+```r
+plot(meaudret$env[, 1] ~ env.categ[, 1], ylab = "Quantitative Temp", 
+    xlab = "Qualitative Temp")
+```
+
+&lt;img src="fig/unnamed-chunk-4-1.svg" width="40%" style="display: block; margin: auto;" /&gt;
+
+---
+# Disjunctive table
+
+The original data table `\(\mathbf{Z}\)` contains categorical information (words).
+
+The first step is to build a disjunctive table with numbers. Information is stored as a binary table with `\(n\)` rows and `\(m\)` columns (total number of categories).
+
+&lt;img src="img/disjunct.png" width="469" style="display: block; margin: auto;" /&gt;
+
+---
+# Multiple correspondence analysis
+
+* `\(\mathbf{X}=\mb{X}_B{\mb{D}_m}^{-1}-{\mb{1}_{n}}{\mb{1}_{m}}\tr\)` is the the transformed and centred disjunctive table
+
+* `\(\mathbf{Q} = \frac{1}{p}\mb{D}_m\)` where `\(\mb{D}_m=diag(\mb{X}_B\tr\mb{D}\mb{1}_{n})\)` contains the category frequencies
+
+* `\(\mathbf{D} = \frac{1}{n}\mathbf{I}_n\)` is the diagonal matrix with `\(\frac{1}{n}\)`
+
+.column-left[
+&lt;img src="img/onetable-Z.png" width="156" style="display: block; margin: auto;" /&gt;
+]
+
+.column-center[
+
+.center[
+`dudi.acm`
+
+&lt;img src="img/arrow.png" width="131" style="display: block; margin: auto;" /&gt;
+]
+]
+
+.column-right[
+&lt;img src="img/pca-map.png" width="353" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Maximized criteria
+
+* For individuals
+
+$$ Q(\mathbf{a})=\sqnorm{\mathbf{XQa}}{\mb{D}} = \sqnorm{\mathbf{X}\frac{1}{p}\mathbf{D}_m\mb{a}}{\frac{1}{n}\mb{I}_n}=\sqnorm{\frac{1}{p}\mathbf{X}_B\mb{a}}{\frac{1}{n}\mb{I}_n}=var\left (\frac{1}{p}\mb{X}_B\mb{a} \right ) =   \lambda
+$$
+
+* For variables
+
+
+ `$$\sqnorm{\mb{X}\tr\mb{Db}}{\mb{Q}} = \sqnorm{\mathbf{X}\tr\frac{1}{n}\mb{I}_n\mb{b}}{\frac{1}{p}\mb{D}_m}=\sqnorm{\frac{1}{n}\mb{D}_m^{-1}\mathbf{X}_B\tr\mb{b}}{\frac{1}{v}\mb{D}_m}$$` 
+
+The vector `\(\frac{1}{n}\mb{D}_m^{-1}\mathbf{X}_B\tr\mb{b}\)` contains means of `\(\mb{b}\)` per category so that:
+
+ `$$\sqnorm{\mathbf{X}\tr\frac{1}{n}\mb{I}_n\mb{b}}{\frac{1}{p}\mb{D}_m}=\frac{1}{p}\sum_{j=1}^{p}\eta^2(\mathbf{z}_j,\mathbf{b})$$` 
+
+This quantity is the mean of correlation ratios computed for all variables.
+
+---
+# The `dudi.acm` function
+## Arguments
+
+
+```r
+args(dudi.acm)
+```
+
+```
+## function (df, row.w = rep(1, nrow(df)), scannf = TRUE, nf = 2) 
+## NULL
+```
+* `df` is a `data.frame` with the categorical data (`factors` in R)
+* `row.w` is an optional vector of weights
+* `scannf` and `nf` allow to set the number of dimensions to interpret
+
+
+```r
+mca.meau &lt;- dudi.acm(env.categ, scannf = FALSE)
+```
+---
+## Returned values
+
+
+```r
+names(mca.meau)
+```
+
+```
+##  [1] "tab"  "cw"   "lw"   "eig"  "rank" "nf"   "l1"   "co"   "li"   "c1"  
+## [11] "call" "cr"
+```
+It returns an object of class `dudi` containing:
+
+- `$eig`: eigenvalues ( `\(\mb{\Lambda}\)` )
+- `$cw`: column (i.e., category) weights ( `\(\frac{1}{v}\mb{D}_m\)` )
+- `$lw`: row weights ( `\(\mb{D}=\frac{1}{n}\mb{I}_n\)` )
+- `$tab`: transformed and centred disjunctive data table ( `\(\mb{X}\)` )
+- `$c1`: category loadings ( `\(\mb{A}\)` )
+- `$li`: row scores ( `\(\mb{L}=\frac{1}{p}\mathbf{X}_B\mb{A}\)` )
+- `$l1`: principal components ( `\(\mb{B}\)` )
+- `$co`: column scores ( `\(\mb{C}=\frac{1}{n}\mb{D}_m^{-1}\mathbf{X}_B\tr\mb{B}\)` )
+- `$cr`: correlation ratios between qualitative variables and axes
+---
+# Graphical representation and interpretation
+
+
+In the first viewpoint, MCA positions categories by a normed score (`$c1`}. A score for individuals (`$li`) is derived from this categories score: an individual is located at the mean of the score of the categories that it carries.
+This second score provides an ordination of individuals with the highest possible dispersion (maximum variance).
+
+In the second type of interpretation, MCA finds normed coordinates for individuals (`$l1`) and positions categories at the mean of the individual scores that belong to them (`$co`). This maximises the mean of the variance of the categories for all variables. In other words, it maximises the mean of the correlation ratios.
+
+---
+## Graphical representations
+
+.pull-left[
+
+```r
+s.label(mca.meau$co)
+```
+
+&lt;img src="fig/unnamed-chunk-12-1.svg" style="display: block; margin: auto;" /&gt;
+]
+.pull-right[
+
+```r
+s.label(mca.meau$li)
+```
+
+&lt;img src="fig/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+---
+## Optimal representation
+
+.pull-left[
+
+```r
+plot(mca.meau, col = TRUE)
+```
+
+&lt;img src="fig/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+```r
+mca.meau$cr
+```
+
+```
+##             RS1         RS2
+## Temp 0.15821537 0.232782758
+## Flow 0.14545664 0.008532622
+## pH   0.75017631 0.079641855
+## Cond 0.95131327 0.220320278
+## Bdo5 0.93106310 0.410689421
+## Oxyd 0.62593624 0.348643718
+## Ammo 0.91289231 0.671527779
+## Nitr 0.07988202 0.491733356
+## Phos 0.74796252 0.149118142
+```
+]
+---
+# Inertia statistics
+
+
+```r
+summary(mca.meau)
+```
+
+```
+## Class: acm dudi
+## Call: dudi.acm(df = env.categ, scannf = FALSE)
+## 
+## Total inertia: 2
+## 
+## Eigenvalues:
+##     Ax1     Ax2     Ax3     Ax4     Ax5 
+##  0.5892  0.2903  0.2505  0.1971  0.1561 
+## 
+## Projected inertia (%):
+##     Ax1     Ax2     Ax3     Ax4     Ax5 
+##  29.461  14.517  12.525   9.857   7.804 
+## 
+## Cumulative projected inertia (%):
+##     Ax1   Ax1:2   Ax1:3   Ax1:4   Ax1:5 
+##   29.46   43.98   56.50   66.36   74.16 
+## 
+## (Only 5 dimensions (out of 14) are shown)
+```
+---
+# Mix of variables
+
+If a table contains both quantitative and categorical variables, Hill and Smith analysis (HSA) can be applied.
+
+This method is a compromise between PCA and MCA. 
+
+* If all the variables are quantitative, then the results of HSA are identical to those of PCA.
+* If all the variables are qualitative, then the results are identical to those of MCA. 
+* If there is a mix of variables, then the analysis is an optimal combination of the properties of the two analyses (maximizing the squared correlations for quantitative variables and correlation ratios for categorical ones)
+---
+
+# MCA in practice
+
+.center[
+
+[Go to practical 3](../../practical/session3/session3.html)
+
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
