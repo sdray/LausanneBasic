@@ -34,7 +34,7 @@ style_duo(primary_color = "#1F4257", secondary_color = "#F97B64", table_row_even
 ---
 # Data
 
-We will analyze the `doubs` data set described (see `?doubs`)
+We will analyze the `doubs` data set (see `?doubs`)
 
 ```{r}
 library(ade4)
