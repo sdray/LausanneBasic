@@ -33,10 +33,10 @@ The directory contains the material for the first four sessions (course and prac
 ## Program
 * **Session 1**: Welcome, presentation of participants. Introduction, packages installation. Theory and 3D explanation of multivariate methods.
     - Course [[html](course/session1/session1.html)|[pdf](course/session1/session1.pdf)|[Rmd](course/session1/session1.Rmd)]
-    - Practical [Rmd|html|pdf]
+    - Practical [[html](course/session2/session2.html)|[pdf](course/session2/session2.pdf)|[Rmd](course/session2/session2.Rmd)]
 * **Session 2**: Analysis of environmental data: Principal Component Analysis.
-    - Course [Rmd|html|pdf]
-    - Practical [Rmd|html|pdf]
+    - Course [[html](course/session2/session2.html)|[pdf](course/session2/session2.pdf)|[Rmd](course/session2/session2.Rmd)]
+    - Practical [[html](practical/session2/session2.html)|[pdf](practical/session2/session2.pdf)|[Rmd](practical/session2/session2.Rmd)] / Correction [[html](practical/session2/session2-corrected.html)|[pdf](practical/session2/session2-corrected.pdf)]
 * **Session 3**: Analysis of environmental data: Multiple Correspondence Analysis. Hill-Smith Analysis
     - Course [Rmd|html|pdf]
     - Practical [Rmd|html|pdf]

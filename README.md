@@ -29,11 +29,16 @@ personal work. The structure of this compendium is as follows:
     methods.
       - Course
         \[[html](course/session1/session1.html)|[pdf](course/session1/session1.pdf)|[Rmd](course/session1/session1.Rmd)\]
-      - Practical \[Rmd|html|pdf\]
+      - Practical
+        \[[html](course/session2/session2.html)|[pdf](course/session2/session2.pdf)|[Rmd](course/session2/session2.Rmd)\]
   - **Session 2**: Analysis of environmental data: Principal Component
     Analysis.
-      - Course \[Rmd|html|pdf\]
-      - Practical \[Rmd|html|pdf\]
+      - Course
+        \[[html](course/session2/session2.html)|[pdf](course/session2/session2.pdf)|[Rmd](course/session2/session2.Rmd)\]
+      - Practical
+        \[[html](practical/session2/session2.html)|[pdf](practical/session2/session2.pdf)|[Rmd](practical/session2/session2.Rmd)\]
+        / Correction
+        \[[html](practical/session2/session2-corrected.html)|[pdf](practical/session2/session2-corrected.pdf)\]
   - **Session 3**: Analysis of environmental data: Multiple
     Correspondence Analysis. Hill-Smith Analysis
       - Course \[Rmd|html|pdf\]
@@ -67,7 +72,7 @@ After unzipping:
 Please cite this document as:
 
 > Dray, S. (2021). Training in ade4 in R - Module I: Basic methods .
-> Accessed 18 avril 2021. Online at
+> Accessed 19 avril 2021. Online at
 > <https://github.com/sdray/LausanneBasic/>
 
 ### Licenses
@@ -107,9 +112,37 @@ utils::sessionInfo()
 #> attached base packages:
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
+#> other attached packages:
+#> [1] rgl_0.105.22         adegraphics_1.0-15   ade4_1.7-16         
+#> [4] xaringanthemer_0.3.3
+#> 
 #> loaded via a namespace (and not attached):
-#>  [1] compiler_4.0.5    magrittr_2.0.1    tools_4.0.5       htmltools_0.5.1.1
-#>  [5] yaml_2.2.1        stringi_1.5.3     rmarkdown_2.7     knitr_1.31       
-#>  [9] stringr_1.4.0     xfun_0.22         digest_0.6.27     rlang_0.4.10     
-#> [13] evaluate_0.14
+#>  [1] sass_0.3.1              pkgload_1.2.1           jsonlite_1.7.2         
+#>  [4] showtext_0.9-2          here_1.0.1              bslib_0.2.4            
+#>  [7] shiny_1.6.0             sp_1.4-5                highr_0.8              
+#> [10] latticeExtra_0.6-29     showtextdb_3.0          yaml_2.2.1             
+#> [13] remotes_2.3.0           progress_1.2.2          sessioninfo_1.1.1      
+#> [16] pillar_1.5.1            lattice_0.20-41         glue_1.4.2             
+#> [19] digest_0.6.27           manipulateWidget_0.10.1 RColorBrewer_1.1-2     
+#> [22] promises_1.2.0.1        websocket_1.3.2         htmltools_0.5.1.1      
+#> [25] httpuv_1.5.5            xaringan_0.20           pkgconfig_2.0.3        
+#> [28] devtools_2.4.0          servr_0.21              sysfonts_0.8.3         
+#> [31] purrr_0.3.4             xtable_1.8-4            webshot_0.5.2          
+#> [34] processx_3.5.1          whisker_0.4             jpeg_0.1-8.1           
+#> [37] later_1.1.0.1           tibble_3.1.0            usethis_2.0.1          
+#> [40] ellipsis_0.3.1          cachem_1.0.4            withr_2.4.1            
+#> [43] cli_2.4.0               magrittr_2.0.1          crayon_1.4.1           
+#> [46] mime_0.10               pagedown_0.13           memoise_2.0.0          
+#> [49] evaluate_0.14           ps_1.6.0                fs_1.5.0               
+#> [52] fansi_0.4.2             MASS_7.3-53.1           pkgbuild_1.2.0         
+#> [55] tools_4.0.5             prettyunits_1.1.1       hms_1.0.0              
+#> [58] formatR_1.8             lifecycle_1.0.0         stringr_1.4.0          
+#> [61] callr_3.6.0             packrat_0.5.0           compiler_4.0.5         
+#> [64] jquerylib_0.1.3         rlang_0.4.10            debugme_1.1.0          
+#> [67] grid_4.0.5              htmlwidgets_1.5.3       crosstalk_1.1.1        
+#> [70] miniUI_0.1.1.1          rmarkdown_2.7           testthat_3.0.2         
+#> [73] R6_2.5.0                knitr_1.31              fastmap_1.1.0          
+#> [76] utf8_1.2.1              rprojroot_2.0.2         KernSmooth_2.23-18     
+#> [79] desc_1.3.0              stringi_1.5.3           Rcpp_1.0.6             
+#> [82] vctrs_0.3.7             png_0.1-7               xfun_0.22
 ```
