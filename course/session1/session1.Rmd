@@ -173,7 +173,7 @@ To answer the two previous questions, we define
 $$ \left ( \mathbf{X}, \mathbf{Q}, \mathbf{D} \right ) $$
 ---
 # Duality diagram theory
-$$\mathbf{X} \mathbf{Q} \mathbf{X}\tr \mathbf{D} \mathbf{K} = \mathbf{B} \bm{\Lambda}$$
+$$\mathbf{X} \mathbf{Q} \mathbf{X}\tr \mathbf{D} \mathbf{B} = \mathbf{B} \bm{\Lambda}$$
     $$\mathbf{X}\tr\mathbf{D}\mathbf{X} \mathbf{Q} \mathbf{A} =  \mathbf{A} \bm{\Lambda}$$
 
   
