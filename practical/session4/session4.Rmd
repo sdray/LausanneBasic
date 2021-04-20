@@ -1,0 +1,144 @@
+---
+title: "Training in ade4 in R - Module I: Basic methods"
+subtitle: "Correspondence analysis"  
+author: "Stéphane Dray"
+date: '`r Sys.Date()`'
+output:
+  xaringan::moon_reader:
+    lib_dir: libs
+    css:  [custom.css, xaringan-themer.css] 
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+    includes:
+            before_body: preamble.tex
+params:
+  correction: FALSE
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(tidy=TRUE, tidy.opts=list(width.cutoff=50), fig.height= 4, fig.width=4, dev='svg', fig.align="center", fig.path = "fig/")
+```
+
+```{r correction, include = FALSE}
+res.correction <- ifelse(params$correction, "markup", "hide")
+```
+
+```{r xaringan-themer, include=FALSE}
+library(xaringanthemer)
+style_duo(primary_color = "#1F4257", secondary_color = "#F97B64", table_row_even_background_color = "#1F4257")
+```
+---
+# Data
+
+We will analyze the `doubs` data set (see `?doubs`)
+
+```{r}
+library(ade4)
+library(adegraphics)
+data(doubs)
+names(doubs)
+names(doubs$fish)
+```
+---
+# Correspondence Analysis
+
+* Perform CA
+* Display the barplot of eigenvalues
+
+```{r, out.width="30%", include = params$correction, echo = params$correction, results=res.correction}
+coa1 <- dudi.coa(doubs$fish, scannf = FALSE)
+screeplot(coa1, main = " ", xlab = " ")
+```
+---
+# Inertia statistics
+
+* Compute the percentage of variation explained bu the first PCA axes
+
+```{r, include = params$correction, echo = params$correction, results=res.correction}
+summary(coa1)
+```
+
+---
+# Graphical representation of CA results
+
+* Plot the results using the `biplot` function 
+
+```{r, fig.dim=c(3.5, 3.5), include = params$correction, echo = params$correction, results=res.correction}
+biplot(coa1)
+```
+---
+# CA scores on the geographical map
+
+* Draw maps of CA scores on the first two axes
+* Interpret the maps to describe how the fish communities vary along the river
+
+```{r, fig.dim=c(4,2), include = params$correction, echo = params$correction, results=res.correction}
+mypal <- colorRampPalette(c("#EDF8FB", "#006D2C"))
+s.value(doubs$xy, coa1$li[, 1:2], pgrid.draw = FALSE, porigin.draw = FALSE,
+    method = "size", symbol = "circle", col = mypal(2),
+    ppoints.cex = 1)
+```
+---
+# Principal Component Analysis
+
+PCA can also be applied on the abundance table. Perform PCAon `doubs$fish` table. Should we scale or not?
+
+```{r, fig.dim=c(3.5, 3.5), include = params$correction, echo = params$correction, results=res.correction}
+pca1 <- dudi.pca(doubs$fish, scale = FALSE, scannf = FALSE)
+biplot(pca1)
+```
+---
+# PCA vs CA
+
+Compare the biplots of CA and PCA
+
+.pull-left[
+```{r, include = params$correction, echo = params$correction, results=res.correction}
+biplot(coa1)
+```
+]
+
+.pull-right[
+```{r, include = params$correction, echo = params$correction, results=res.correction}
+biplot(pca1)
+```
+]
+---
+# Principal Coordinates Analysis
+
+* Compute Jaccard distances between sites 
+* Perform principal coordinates analysis and display the ordination of sites
+
+```{r, include = params$correction, echo = params$correction, results=res.correction}
+dis <- dist.binary(doubs$fish, method = 1)
+pco1 <- dudi.pco(dis, scannf = FALSE)
+s.label(pco1$li)
+```
+---
+# PCA and PCoA
+
+* Compare the results of PCA and those of PCoA applied on Euclidean distance (function  `dist`)
+
+```{r, include = params$correction, echo = params$correction, results=res.correction}
+dis2 <- dist(doubs$fish)
+pco2 <- dudi.pco(dis2, scannf = FALSE)
+```
+
+.pull-left[
+```{r, include = params$correction, echo = params$correction, results=res.correction}
+head(pca1$eig, 2)
+head(pca1$li)
+```
+]
+
+.pull-right[
+```{r, include = params$correction, echo = params$correction, results=res.correction}
+head(pco2$eig, 2)
+head(pco2$li)
+```
+]
+
+

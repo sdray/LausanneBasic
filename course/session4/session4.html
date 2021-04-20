@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Training in ade4 in R - Module I: Basic methods</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Stéphane Dray" />
+    <meta name="date" content="2021-04-20" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Training in ade4 in R - Module I: Basic methods
+## Correspondence analysis and Principal Coordinates Analysis
+### Stéphane Dray
+### 2021-04-20
+
+---
+
+$$
+%center text/code
+\newcommand{\bcenter}{\begin{center}}
+\newcommand{\ecenter}{\end{center}}
+$$
+
+$$
+\newcommand{\bm}[1]{\boldsymbol{\mathbf{#1}}}
+\newcommand{\tr}{\hspace{-0.05cm}^{\top}\hspace{-0.05cm}}% transpose d'une matrice
+\newcommand{\mb}[1]{\mathbf{#1}}
+\newcommand{\pt}{\mathsmaller \bullet}% petit point pour les indices
+$$
+
+
+$$
+\newcommand{\triplet}[3]{
+% pour ecrire un triplet dans le texte
+$\left ( #1, #2, #3 \right )$
+}
+$$
+
+$$
+\newcommand{\sqnorm}[2]{
+%norme au carré
+\lVert  #1 \rVert^2_{#2}
+}
+$$
+
+$$
+\newcommand{\norm}[2]{
+%norme
+ \lVert #1 \rVert_{#2}
+}
+$$
+
+
+
+
+---
+# Data structure
+
+.left-column[
+&lt;img src="img/onetable-categ.png" width="188" style="display: block; margin: auto;" /&gt;
+]
+
+.right-column[
+* One table with *n* rows and *m* columns
+
+* Data are counts of individuals (sums by row and columns are meaningful) 
+
+* For instance
+    - sites `\(\times\)` species 
+]
+---
+# Objectives
+
+* Identify what is the main information contained in the table
+
+  - Identify the principal differences/similarities between row categories
+  - Identify the principal differences/similarities between column categories
+  - Identify the principal differences/similarities between row and column categories
+  
+---
+# Data
+
+We consider the `meaudret` data set
+
+
+```r
+library(ade4)
+data(meaudret)
+names(meaudret)
+```
+
+```
+## [1] "env"       "design"    "spe"       "spe.names"
+```
+
+```r
+dim(meaudret$spe)
+```
+
+```
+## [1] 20 13
+```
+
+```r
+head(meaudret$spe.names)
+```
+
+```
+## [1] "Ephemera_danica" "Baetis_sp"       "Baetis_rhodani"  "Baetis_niger"    "Baetis_muticus" 
+## [6] "Centroptilum_sp"
+```
+---
+The data set contains the abundances of 13 Ephemeroptera species in 20 samples. The measurements have been made in 6 sites at each season along a small French stream (see `?meaudret`)
+
+
+```r
+head(meaudret$design)
+```
+
+```
+##      season site
+## sp_1 spring   S1
+## sp_2 spring   S2
+## sp_3 spring   S3
+## sp_4 spring   S4
+## sp_5 spring   S5
+## su_1 summer   S1
+```
+
+We want to know
+
+* which species have similar distributions
+* which sites have similar composition
+* which species are mainly present in which sites
+---
+# Contingency table
+
+.pull-left[
+
+```r
+library(adegraphics)
+table.value(meaudret$spe, symbol = "circle", ppoints.cex = 0.5)
+```
+
+&lt;img src="fig/unnamed-chunk-4-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+```r
+head(rowSums(meaudret$spe))
+```
+
+```
+## sp_1 sp_2 sp_3 sp_4 sp_5 su_1 
+##   48   12   17   18   24   44
+```
+
+```r
+head(colSums(meaudret$spe))
+```
+
+```
+## Eda Bsp Brh Bni Bpu Cen 
+##  20 104 163  11  35  37
+```
+
+```r
+sum(meaudret$spe)
+```
+
+```
+## [1] 595
+```
+
+]
+---
+# Chi-square test
+
+The `\(\chi^2\)` test allows to measure and evaluate the significance of the association between species and sites (the null hypothesis is the random distribution)
+
+`$$\chi^2_{obs} = \sum_{i=1}^I \sum_{j=1}^J \frac{\left( y_{ij} - \frac{y_{i.} \, y_{.j}}{y_{..}} \right)^2}{\frac{y_{i.} \, y_{.j}}{y_{..}}}$$`
+
+
+```r
+chisq.test(meaudret$spe)
+```
+
+```
+## Warning in chisq.test(meaudret$spe): Chi-squared approximation may be incorrect
+```
+
+```
+## 
+## 	Pearson's Chi-squared test
+## 
+## data:  meaudret$spe
+## X-squared = 534.52, df = 228, p-value &lt; 2.2e-16
+```
+---
+# Absolute and relative frequencies
+&lt;img src="fig/unnamed-chunk-7-1.svg" style="display: block; margin: auto;" /&gt;
+
+* In PCA (Euclidean distances), species 2 and 3 are closer
+* In COA ( `\(\chi^2\)` distances), species 1 and 2 are closer (null distance)
+---
+# Correspondence analysis 
+
+* `\(\mathbf{X}=\mathbf{D}_n^{-1}\mb{P}\mathbf{D}_m^{-1} - \mb{1}_n\mb{1}_m\tr\)` is the  transformed and centred table of relative frequencies with `\(\mb{P}=[y_{ij}/y_{..}]\)`
+
+* `\(\mathbf{Q} = \mb{D}_m\)` where `\(\mb{D}_m=diag(\mb{P}\tr\mb{1}_n)\)` contains the column category frequencies
+
+* `\(\mathbf{D} = \mb{D}_n\)` where `\(\mb{D}_n=diag(\mb{P1}_m)\)` contains the row category frequencies
+
+.column-left[
+&lt;img src="img/onetable-categ.png" width="188" style="display: block; margin: auto;" /&gt;
+]
+
+.column-center[
+
+.center[
+`dudi.coa`
+
+&lt;img src="img/arrow.png" width="131" style="display: block; margin: auto;" /&gt;
+]
+]
+
+.column-right[
+&lt;img src="img/pca-map.png" width="353" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Maximized criteria
+
+* For rows
+
+`$$Q(\mathbf{a})=\sqnorm{\mathbf{D}_n^{-1}\mb{P}_0\mathbf{D}_m^{-1}\mathbf{D}_m\mb{a}}{\mb{D}_n}=\sqnorm{\mathbf{D}_n^{-1}\mb{P}_0\mb{a}}{\mb{D}_n}$$`
+
+In this viewpoint, columns have a unit-variance score `\(\mb{a}\)` that maximises the variance between the row barycenters.
+
+* For columns
+
+ `$$\sqnorm{\mathbf{D}_m^{-1}\mb{P}_0\tr\mathbf{D}_n^{-1}\mathbf{D}_n\mb{b}}{\mb{D}_m}=\sqnorm{\mathbf{D}_m^{-1}\mb{P}_0\tr\mb{b}}{\mb{D}_m}$$` 
+In this viewpoint, rows have a unit-variance score `\(\mb{b}\)` that maximises the variance between the column barycenters.
+
+---
+# The `dudi.coa` function
+## Arguments
+
+
+```r
+args(dudi.coa)
+```
+
+```
+## function (df, scannf = TRUE, nf = 2) 
+## NULL
+```
+* `df` is a `data.frame` with the positive values (counts)
+* `scannf` and `nf` allow to set the number of dimensions to interpret
+
+
+```r
+coa.meau &lt;- dudi.coa(meaudret$spe, scannf = FALSE)
+```
+---
+## Returned values
+
+
+```r
+names(coa.meau)
+```
+
+```
+##  [1] "tab"  "cw"   "lw"   "eig"  "rank" "nf"   "c1"   "li"   "co"   "l1"   "call" "N"
+```
+It returns an object of class `dudi` containing:
+
+
+- `$eig`: eigenvalues ( `\(\mb{\Lambda}\)` ) 
+- `$cw`: column weights ( `\(\mb{D}_m\)` )
+- `$lw`: row weights ( `\(\mb{D}_n\)` )
+- `$tab`: centred relative frequencies table ( `\(\mb{D}_n^{-1}\mb{P}_0\mb{D}_m^{-1}\)` )
+- `$c1`: unit-variance column scores ( `\(\mb{A}\)` )
+- `$li`: row scores  as weighted averages ( `\(\mb{L}=\mathbf{D}_n^{-1}\mb{P}_0\mb{A}\)` )
+- `$l1`: unit-variance row scores ( `\(\mb{B}\)` )
+- `$co`: column scores as weighted averages ( `\(\mb{C}=\mathbf{D}_m^{-1}\mb{P}_0\tr\mb{B}\)` )
+- `$N`: total sum ( `\(y_{..}\)` )
+---
+# Graphical representations
+
+Biplot can be produced for CA using the `biplot` function. Three types of biplots can be produced using the argument `method`
+* If `method = 2`, species are positioned by a unit-variance score (`$c1`) and sites by weighted averaging (`li`).
+* If `method = 3`, sites are positioned by a unit-variance score (`$l1`) and species by weighted averaging (`$co`).
+* By default, `method = 1` corresponds to a compromise between these two representations (`$li` and `$co`).  
+---
+# Weighted averaging
+
+
+
+
+.pull-left[
+&lt;img src="fig/unnamed-chunk-14-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="fig/unnamed-chunk-15-1.svg" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Separate representations
+
+.pull-left[
+
+```r
+s.label(coa.meau$co, plabels.optim = TRUE, ppoints.cex = 0.5)
+```
+
+&lt;img src="fig/unnamed-chunk-16-1.svg" style="display: block; margin: auto;" /&gt;
+
+
+]
+.pull-right[
+
+```r
+s.label(coa.meau$li, plabels.optim = TRUE, ppoints.cex = 0.5)
+```
+
+&lt;img src="fig/unnamed-chunk-17-1.svg" style="display: block; margin: auto;" /&gt;
+]
+---
+# Reordering of a table
+
+
+```r
+g1 &lt;- table.value(meaudret$spe, ppoint.cex = 0.5, symbol = "circle", 
+    plot = FALSE)
+g2 &lt;- table.value(meaudret$spe, ppoint.cex = 0.5, symbol = "circle", 
+    coordsx = rank(coa.meau$co[, 1]), coordsy = rank(coa.meau$li[, 
+        1]), plot = FALSE)
+cbindADEg(g1, g2, plot = TRUE)
+```
+
+&lt;img src="fig/unnamed-chunk-18-1.svg" style="display: block; margin: auto;" /&gt;
+
+---
+# Principal coordinates analysis
+
+* PCA, CA methods induce implicitly a way to compute distances
+* Several other distances have been proposed (e.g., genetic, presence-absence) 
+* PCoA takes a distance matrix as input and returns coordinates in a low dimensional space that best preserve the original distances.
+
+
+* 😄  it allows to choose a particular distance measure between sites (or species). 
+* 😥  it focuses either on individuals or variables, not both.
+
+* Useful if distances are directly recorded or computed from raw data tables
+---
+
+```r
+dJ &lt;- dist.binary(meaudret$spe, method = 1)  # Jaccard
+pcoJ &lt;- dudi.pco(dJ, scannf = FALSE)
+s.label(pcoJ$li, plabels.optim = TRUE)
+```
+
+&lt;img src="fig/unnamed-chunk-19-1.svg" style="display: block; margin: auto;" /&gt;
+---
+
+# COA in practice
+
+.center[
+
+[Go to practical 4](../../practical/session4/session4.html)
+
+]
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
