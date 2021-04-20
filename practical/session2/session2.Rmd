@@ -136,7 +136,7 @@ s.value(xy, pca1$li[, 1:2], pgrid.draw = FALSE, porigin.draw = FALSE,
 # A look to variables
 
 * Compute the correlations between original variables and PCA axes
-* In which elmement of PCA outputs are stored these values
+* In which element of PCA outputs are stored these values
 
 
 ```{r, echo = params$correction, results=res.correction}

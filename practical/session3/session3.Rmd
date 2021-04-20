@@ -51,7 +51,7 @@ fenv <- apply(doubs$env, 2, cut, breaks = 4, labels = 1:4)
 fenv <- as.data.frame(fenv, stringsAsFactors = TRUE)
 ```
 ---
-# Multiple Corrsepondence Analysis
+# Multiple Correspondence Analysis
 
 * Perform MCA
 * Display the barplot of eigenvalues
