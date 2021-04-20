@@ -30,7 +30,7 @@ personal work. The structure of this compendium is as follows:
       - Course
         \[[html](course/session1/session1.html)|[pdf](course/session1/session1.pdf)|[Rmd](course/session1/session1.Rmd)\]
       - Practical
-        \[[html](course/session2/session2.html)|[pdf](course/session2/session2.pdf)|[Rmd](course/session2/session2.Rmd)\]
+        \[[html](practical/session1/session1.html)|[pdf](practical/session1/session1.pdf)|[Rmd](practical/session1/session1.Rmd)\]
   - **Session 2**: Analysis of environmental data: Principal Component
     Analysis.
       - Course
@@ -84,7 +84,7 @@ An alternative is to use the following code in your R session:
 Please cite this document as:
 
 > Dray, S. (2021). Training in ade4 in R - Module I: Basic methods .
-> Accessed 19 avril 2021. Online at
+> Accessed 20 avril 2021. Online at
 > <https://github.com/sdray/LausanneBasic/>
 
 ### Licenses
@@ -114,47 +114,28 @@ utils::sessionInfo()
 #> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
 #> 
 #> locale:
-#>  [1] LC_CTYPE=fr_FR.UTF-8       LC_NUMERIC=C              
-#>  [3] LC_TIME=fr_FR.UTF-8        LC_COLLATE=fr_FR.UTF-8    
-#>  [5] LC_MONETARY=fr_FR.UTF-8    LC_MESSAGES=fr_FR.UTF-8   
-#>  [7] LC_PAPER=fr_FR.UTF-8       LC_NAME=C                 
-#>  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
-#> [11] LC_MEASUREMENT=fr_FR.UTF-8 LC_IDENTIFICATION=C       
+#>  [1] LC_CTYPE=fr_FR.UTF-8       LC_NUMERIC=C               LC_TIME=fr_FR.UTF-8       
+#>  [4] LC_COLLATE=fr_FR.UTF-8     LC_MONETARY=fr_FR.UTF-8    LC_MESSAGES=fr_FR.UTF-8   
+#>  [7] LC_PAPER=fr_FR.UTF-8       LC_NAME=C                  LC_ADDRESS=C              
+#> [10] LC_TELEPHONE=C             LC_MEASUREMENT=fr_FR.UTF-8 LC_IDENTIFICATION=C       
 #> 
 #> attached base packages:
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] rgl_0.105.22         adegraphics_1.0-15   ade4_1.7-16         
-#> [4] xaringanthemer_0.3.3
+#> [1] adegraphics_1.0-15   xaringanthemer_0.3.3 ade4_1.7-16         
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] sass_0.3.1              pkgload_1.2.1           jsonlite_1.7.2         
-#>  [4] showtext_0.9-2          here_1.0.1              bslib_0.2.4            
-#>  [7] shiny_1.6.0             assertthat_0.2.1        sp_1.4-5               
-#> [10] highr_0.8               latticeExtra_0.6-29     showtextdb_3.0         
-#> [13] emo_0.0.0.9000          yaml_2.2.1              remotes_2.3.0          
-#> [16] progress_1.2.2          sessioninfo_1.1.1       lattice_0.20-41        
-#> [19] glue_1.4.2              digest_0.6.27           manipulateWidget_0.10.1
-#> [22] RColorBrewer_1.1-2      promises_1.2.0.1        websocket_1.3.2        
-#> [25] htmltools_0.5.1.1       httpuv_1.5.5            xaringan_0.20          
-#> [28] pkgconfig_2.0.3         devtools_2.4.0          servr_0.21             
-#> [31] sysfonts_0.8.3          purrr_0.3.4             xtable_1.8-4           
-#> [34] webshot_0.5.2           processx_3.5.1          whisker_0.4            
-#> [37] jpeg_0.1-8.1            later_1.1.0.1           generics_0.1.0         
-#> [40] usethis_2.0.1           ellipsis_0.3.1          cachem_1.0.4           
-#> [43] withr_2.4.1             cli_2.4.0               magrittr_2.0.1         
-#> [46] crayon_1.4.1            mime_0.10               pagedown_0.13          
-#> [49] memoise_2.0.0           evaluate_0.14           ps_1.6.0               
-#> [52] fs_1.5.0                MASS_7.3-53.1           pkgbuild_1.2.0         
-#> [55] tools_4.0.5             prettyunits_1.1.1       hms_1.0.0              
-#> [58] formatR_1.8             lifecycle_1.0.0         stringr_1.4.0          
-#> [61] callr_3.6.0             packrat_0.5.0           compiler_4.0.5         
-#> [64] jquerylib_0.1.3         rlang_0.4.10            grid_4.0.5             
-#> [67] htmlwidgets_1.5.3       crosstalk_1.1.1         miniUI_0.1.1.1         
-#> [70] rmarkdown_2.7           testthat_3.0.2          R6_2.5.0               
-#> [73] lubridate_1.7.10        knitr_1.31              fastmap_1.1.0          
-#> [76] rprojroot_2.0.2         KernSmooth_2.23-18      desc_1.3.0             
-#> [79] stringi_1.5.3           Rcpp_1.0.6              vctrs_0.3.7            
-#> [82] png_0.1-7               xfun_0.22
+#>  [1] highr_0.8           RColorBrewer_1.1-2  bslib_0.2.4         compiler_4.0.5     
+#>  [5] formatR_1.8         jquerylib_0.1.3     prettyunits_1.1.1   tools_4.0.5        
+#>  [9] progress_1.2.2      sysfonts_0.8.3      digest_0.6.27       packrat_0.5.0      
+#> [13] jsonlite_1.7.2      evaluate_0.14       lifecycle_1.0.0     lattice_0.20-41    
+#> [17] png_0.1-7           pkgconfig_2.0.3     rlang_0.4.10        yaml_2.2.1         
+#> [21] xfun_0.22           stringr_1.4.0       showtextdb_3.0      knitr_1.31         
+#> [25] vctrs_0.3.7         sass_0.3.1          hms_1.0.0           rprojroot_2.0.2    
+#> [29] grid_4.0.5          glue_1.4.2          here_1.0.1          R6_2.5.0           
+#> [33] jpeg_0.1-8.1        rmarkdown_2.7       xaringan_0.20       sp_1.4-5           
+#> [37] latticeExtra_0.6-29 purrr_0.3.4         magrittr_2.0.1      whisker_0.4        
+#> [41] ellipsis_0.3.1      htmltools_0.5.1.1   MASS_7.3-53.1       showtext_0.9-2     
+#> [45] KernSmooth_2.23-18  stringi_1.5.3       crayon_1.4.1
 ```
