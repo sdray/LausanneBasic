@@ -4,7 +4,8 @@
     <title>Training in ade4 in R - Module I: Basic methods</title>
     <meta charset="utf-8" />
     <meta name="author" content="Stéphane Dray" />
-    <meta name="date" content="2021-04-20" />
+    <meta name="date" content="2023-12-03" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="custom.css" type="text/css" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -12,10 +13,18 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # Training in ade4 in R - Module I: Basic methods
+]
+.subtitle[
 ## Principal component analysis
+]
+.author[
 ### Stéphane Dray
-### 2021-04-20
+]
+.date[
+### 2023-12-03
+]
 
 ---
 
@@ -114,7 +123,7 @@ table.value(scale(env), symbol = "circle")
 ```r
 xy &lt;- doubs$xy
 sl1 &lt;- s.label(xy, ppoints.cex = 0, plot = FALSE)
-st1 &lt;- s.traject(xy, ppoints.cex = 0, plabels.cex = 0, 
+st1 &lt;- s.traject(xy, ppoints.cex = 0, plabels.cex = 0,
     plot = FALSE)
 s1 &lt;- superpose(st1, sl1, plot = TRUE)
 ```
@@ -135,8 +144,8 @@ s.value(xy, doubs$env[, 1])
 
 ```r
 mypal &lt;- colorRampPalette(c("#EDF8FB", "#006D2C"))
-s.value(xy, doubs$env, pgrid.draw = FALSE, porigin.draw = FALSE, 
-    plegend.drawKey = FALSE, psub.cex = 2, method = "color", 
+s.value(xy, doubs$env, pgrid.draw = FALSE, porigin.draw = FALSE,
+    plegend.drawKey = FALSE, psub.cex = 2, method = "color",
     symbol = "circle", ppalette.quanti = mypal, ppoints.cex = 0.5)
 ```
 
@@ -148,7 +157,7 @@ Must we scale or not the data?
 
 
 ```r
-pca1 &lt;- dudi.pca(env, scale = TRUE, scannf = FALSE, 
+pca1 &lt;- dudi.pca(env, scale = TRUE, scannf = FALSE,
     nf = 2)
 ```
 ---
@@ -197,7 +206,7 @@ screeplot(pca1, main = "PCA Eigenvalues")
 
 ```r
 sc1 &lt;- s.corcircle(pca1$co, plot = FALSE)
-sl1 &lt;- s.label(pca1$li, plabels.optim = TRUE, ppoints.cex = 0.5, 
+sl1 &lt;- s.label(pca1$li, plabels.optim = TRUE, ppoints.cex = 0.5,
     plot = FALSE)
 ADEgS(list(sc1, sl1))
 ```
@@ -211,8 +220,8 @@ ADEgS(list(sc1, sl1))
 
 
 ```r
-s.value(xy, pca1$li[, 1:2], pgrid.draw = FALSE, porigin.draw = FALSE, 
-    method = "size", symbol = "circle", col = mypal(2), 
+s.value(xy, pca1$li[, 1:2], pgrid.draw = FALSE, porigin.draw = FALSE,
+    method = "size", symbol = "circle", col = mypal(2),
     ppoints.cex = 1)
 ```
 
@@ -230,12 +239,9 @@ cor(pca1$l1, doubs$env)
 ```
 
 ```
-##            dfs        alt        slo        flo          pH        har       pho       nit
-## RS1  0.8733503 -0.8390535 -0.7602047  0.7777617 -0.02457895  0.7122973 0.8111056 0.9015491
-## RS2 -0.3963445  0.4537709  0.4145874 -0.5037445 -0.37560694 -0.4011204 0.5033806 0.1066847
-##           amm        oxy       bdo
-## RS1 0.7671086 -0.7489949 0.7375260
-## RS2 0.5785809 -0.4280275 0.5985336
+##            dfs        alt        slo        flo          pH        har       pho       nit       amm        oxy       bdo
+## RS1  0.8733503 -0.8390535 -0.7602047  0.7777617 -0.02457895  0.7122973 0.8111056 0.9015491 0.7671086 -0.7489949 0.7375260
+## RS2 -0.3963445  0.4537709  0.4145874 -0.5037445 -0.37560694 -0.4011204 0.5033806 0.1066847 0.5785809 -0.4280275 0.5985336
 ```
 
 ```r
@@ -262,6 +268,8 @@ score(pca1)
 ```
 
 &lt;img src="fig/unnamed-chunk-13-1.svg" style="display: block; margin: auto;" /&gt;
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -309,6 +317,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

@@ -301,7 +301,7 @@
   <path d="M 202.640625 210 L 249.191406 210 L 249.191406 258.359375 L 202.640625 258.359375 Z M 202.640625 210 "/>
 </clipPath>
 </defs>
-<g id="surface1888">
+<g id="surface993">
 <rect x="0" y="0" width="360" height="280" style="fill:rgb(100%,100%,100%);fill-opacity:1;stroke:none;"/>
 <g clip-path="url(#clip1)" clip-rule="nonzero">
 <path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;" d="M 0.632812 71.691406 L 86.199219 71.691406 L 86.199219 17.640625 L 0.632812 17.640625 Z M 0.632812 71.691406 "/>
@@ -994,7 +994,7 @@
 <path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 58.054688 130.96875 C 58.054688 132.378906 55.941406 132.378906 55.941406 130.96875 C 55.941406 129.5625 58.054688 129.5625 58.054688 130.96875 "/>
 <path style="fill-rule:nonzero;fill:rgb(0%,0%,0%);fill-opacity:1;stroke-width:0.75;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 66.863281 120.445312 C 66.863281 121.855469 64.753906 121.855469 64.753906 120.445312 C 64.753906 119.039062 66.863281 119.039062 66.863281 120.445312 "/>
 <g style="fill:rgb(0%,0%,0%);fill-opacity:1;">
-  <use xlink:href="#glyph1-13" x="81.066406" y="154.138672"/>
+  <use xlink:href="#glyph1-13" x="1.765625" y="154.138672"/>
 </g>
 <g style="fill:rgb(0%,0%,0%);fill-opacity:1;">
   <use xlink:href="#glyph1-14" x="23.183594" y="143.611328"/>

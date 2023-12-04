@@ -4,7 +4,8 @@
     <title>Training in ade4 in R - Module I: Basic methods</title>
     <meta charset="utf-8" />
     <meta name="author" content="Stéphane Dray" />
-    <meta name="date" content="2021-04-20" />
+    <meta name="date" content="2023-12-03" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="custom.css" type="text/css" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -12,10 +13,18 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # Training in ade4 in R - Module I: Basic methods
+]
+.subtitle[
 ## Correspondence analysis and Principal Coordinates Analysis
+]
+.author[
 ### Stéphane Dray
-### 2021-04-20
+]
+.date[
+### 2023-12-03
+]
 
 ---
 
@@ -110,8 +119,7 @@ head(meaudret$spe.names)
 ```
 
 ```
-## [1] "Ephemera_danica" "Baetis_sp"       "Baetis_rhodani"  "Baetis_niger"    "Baetis_muticus" 
-## [6] "Centroptilum_sp"
+## [1] "Ephemera_danica" "Baetis_sp"       "Baetis_rhodani"  "Baetis_niger"    "Baetis_muticus"  "Centroptilum_sp"
 ```
 ---
 The data set contains the abundances of 13 Ephemeroptera species in 20 samples. The measurements have been made in 6 sites at each season along a small French stream (see `?meaudret`)
@@ -191,7 +199,7 @@ chisq.test(meaudret$spe)
 ```
 
 ```
-## Warning in chisq.test(meaudret$spe): Chi-squared approximation may be incorrect
+## Warning in chisq.test(meaudret$spe): L’approximation du Chi-2 est peut-être incorrecte
 ```
 
 ```
@@ -337,10 +345,10 @@ s.label(coa.meau$li, plabels.optim = TRUE, ppoints.cex = 0.5)
 
 
 ```r
-g1 &lt;- table.value(meaudret$spe, ppoint.cex = 0.5, symbol = "circle", 
+g1 &lt;- table.value(meaudret$spe, ppoint.cex = 0.5, symbol = "circle",
     plot = FALSE)
-g2 &lt;- table.value(meaudret$spe, ppoint.cex = 0.5, symbol = "circle", 
-    coordsx = rank(coa.meau$co[, 1]), coordsy = rank(coa.meau$li[, 
+g2 &lt;- table.value(meaudret$spe, ppoint.cex = 0.5, symbol = "circle",
+    coordsx = rank(coa.meau$co[, 1]), coordsy = rank(coa.meau$li[,
         1]), plot = FALSE)
 cbindADEg(g1, g2, plot = TRUE)
 ```
@@ -424,6 +432,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

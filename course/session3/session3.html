@@ -4,7 +4,8 @@
     <title>Training in ade4 in R - Module I: Basic methods</title>
     <meta charset="utf-8" />
     <meta name="author" content="Stéphane Dray" />
-    <meta name="date" content="2021-04-20" />
+    <meta name="date" content="2023-12-03" />
+    <script src="libs/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="custom.css" type="text/css" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -12,10 +13,18 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # Training in ade4 in R - Module I: Basic methods
+]
+.subtitle[
 ## Multiple correspondence analysis
+]
+.author[
 ### Stéphane Dray
-### 2021-04-20
+]
+.date[
+### 2023-12-03
+]
 
 ---
 
@@ -118,7 +127,7 @@ The data set contains an environmental table with 20 measurements of 9 environme
 
 
 ```r
-env.categ &lt;- apply(meaudret$env, 2, cut, breaks = 3, 
+env.categ &lt;- apply(meaudret$env, 2, cut, breaks = 3,
     labels = c("low", "med", "hi"))
 env.categ &lt;- as.data.frame(env.categ, stringsAsFactors = TRUE)
 head(env.categ, 3)
@@ -145,7 +154,7 @@ We want to know
   
 
 ```r
-plot(meaudret$env[, 1] ~ env.categ[, 1], ylab = "Quantitative Temp", 
+plot(meaudret$env[, 1] ~ env.categ[, 1], ylab = "Quantitative Temp",
     xlab = "Qualitative Temp")
 ```
 
@@ -402,6 +411,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
