@@ -64,7 +64,7 @@ dim(meaudret$env)
 names(meaudret$env)
 ```
 ---
-The data set contains an environmental table with 20 measurements of 9 environmental variables. The measurements have been made in 6 sites at each season along a small French stream (see `?meaudret`)
+The data set contains an environmental table with 20 measurements of 9 environmental variables. The measurements have been made in 5 sites at each season along a small French stream (see `?meaudret`)
 
 ```{r}
 head(meaudret$design)
