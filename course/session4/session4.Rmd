@@ -63,7 +63,7 @@ dim(meaudret$spe)
 head(meaudret$spe.names)
 ```
 ---
-The data set contains the abundances of 13 Ephemeroptera species in 20 samples. The measurements have been made in 6 sites at each season along a small French stream (see `?meaudret`)
+The data set contains the abundances of 13 Ephemeroptera species in 20 samples. The measurements have been made in 5 sites at each season along a small French stream (see `?meaudret`)
 
 ```{r}
 head(meaudret$design)

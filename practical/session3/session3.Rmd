@@ -69,9 +69,9 @@ screeplot(acm1, main = " ", xlab = " ")
 plot(acm1, col = TRUE)
 ```
 ---
-# PCA scores on the geographical map
+# MCA scores on the geographical map
 
-* Draw maps of PCA scores on the first two axes
+* Draw maps of MCA scores on the first two axes
 * Interpret the maps to describe the environmental structure of the river
 
 ```{r, fig.dim=c(4,2), include = params$correction, echo = params$correction, results=res.correction}

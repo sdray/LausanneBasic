@@ -55,7 +55,7 @@ screeplot(coa1, main = " ", xlab = " ")
 ---
 # Inertia statistics
 
-* Compute the percentage of variation explained bu the first PCA axes
+* Compute the percentage of variation explained by the first COA axes
 
 ```{r, include = params$correction, echo = params$correction, results=res.correction}
 summary(coa1)
@@ -84,7 +84,7 @@ s.value(doubs$xy, coa1$li[, 1:2], pgrid.draw = FALSE, porigin.draw = FALSE,
 ---
 # Principal Component Analysis
 
-PCA can also be applied on the abundance table. Perform PCAon `doubs$fish` table. Should we scale or not?
+PCA can also be applied on the abundance table. Perform PCA on `doubs$fish` table. Should we scale or not?
 
 ```{r, fig.dim=c(3.5, 3.5), include = params$correction, echo = params$correction, results=res.correction}
 pca1 <- dudi.pca(doubs$fish, scale = FALSE, scannf = FALSE)
