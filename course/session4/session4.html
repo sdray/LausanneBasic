@@ -4,7 +4,7 @@
     <title>Training in ade4 in R - Module I: Basic methods</title>
     <meta charset="utf-8" />
     <meta name="author" content="Stéphane Dray" />
-    <meta name="date" content="2023-12-03" />
+    <meta name="date" content="2023-12-06" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="custom.css" type="text/css" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
@@ -23,7 +23,7 @@ class: center, middle, inverse, title-slide
 ### Stéphane Dray
 ]
 .date[
-### 2023-12-03
+### 2023-12-06
 ]
 
 ---
@@ -119,10 +119,11 @@ head(meaudret$spe.names)
 ```
 
 ```
-## [1] "Ephemera_danica" "Baetis_sp"       "Baetis_rhodani"  "Baetis_niger"    "Baetis_muticus"  "Centroptilum_sp"
+## [1] "Ephemera_danica" "Baetis_sp"       "Baetis_rhodani"  "Baetis_niger"   
+## [5] "Baetis_muticus"  "Centroptilum_sp"
 ```
 ---
-The data set contains the abundances of 13 Ephemeroptera species in 20 samples. The measurements have been made in 6 sites at each season along a small French stream (see `?meaudret`)
+The data set contains the abundances of 13 Ephemeroptera species in 20 samples. The measurements have been made in 5 sites at each season along a small French stream (see `?meaudret`)
 
 
 ```r
@@ -199,7 +200,8 @@ chisq.test(meaudret$spe)
 ```
 
 ```
-## Warning in chisq.test(meaudret$spe): L’approximation du Chi-2 est peut-être incorrecte
+## Warning in chisq.test(meaudret$spe): L’approximation du Chi-2 est peut-être
+## incorrecte
 ```
 
 ```
@@ -284,7 +286,8 @@ names(coa.meau)
 ```
 
 ```
-##  [1] "tab"  "cw"   "lw"   "eig"  "rank" "nf"   "c1"   "li"   "co"   "l1"   "call" "N"
+##  [1] "tab"  "cw"   "lw"   "eig"  "rank" "nf"   "c1"   "li"   "co"   "l1"   "call"
+## [12] "N"
 ```
 It returns an object of class `dudi` containing:
 

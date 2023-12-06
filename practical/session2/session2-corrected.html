@@ -4,7 +4,7 @@
     <title>Training in ade4 in R - Module I: Basic methods</title>
     <meta charset="utf-8" />
     <meta name="author" content="Stéphane Dray" />
-    <meta name="date" content="2023-12-03" />
+    <meta name="date" content="2023-12-06" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="custom.css" type="text/css" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
@@ -23,7 +23,7 @@ class: center, middle, inverse, title-slide
 ### Stéphane Dray
 ]
 .date[
-### 2023-12-03
+### 2023-12-06
 ]
 
 ---
@@ -239,9 +239,12 @@ cor(pca1$l1, doubs$env)
 ```
 
 ```
-##            dfs        alt        slo        flo          pH        har       pho       nit       amm        oxy       bdo
-## RS1  0.8733503 -0.8390535 -0.7602047  0.7777617 -0.02457895  0.7122973 0.8111056 0.9015491 0.7671086 -0.7489949 0.7375260
-## RS2 -0.3963445  0.4537709  0.4145874 -0.5037445 -0.37560694 -0.4011204 0.5033806 0.1066847 0.5785809 -0.4280275 0.5985336
+##            dfs        alt        slo        flo          pH        har       pho
+## RS1  0.8733503 -0.8390535 -0.7602047  0.7777617 -0.02457895  0.7122973 0.8111056
+## RS2 -0.3963445  0.4537709  0.4145874 -0.5037445 -0.37560694 -0.4011204 0.5033806
+##           nit       amm        oxy       bdo
+## RS1 0.9015491 0.7671086 -0.7489949 0.7375260
+## RS2 0.1066847 0.5785809 -0.4280275 0.5985336
 ```
 
 ```r

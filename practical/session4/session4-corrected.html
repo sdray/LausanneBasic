@@ -4,7 +4,7 @@
     <title>Training in ade4 in R - Module I: Basic methods</title>
     <meta charset="utf-8" />
     <meta name="author" content="Stéphane Dray" />
-    <meta name="date" content="2023-12-03" />
+    <meta name="date" content="2023-12-06" />
     <script src="libs/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="custom.css" type="text/css" />
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
@@ -23,7 +23,7 @@ class: center, middle, inverse, title-slide
 ### Stéphane Dray
 ]
 .date[
-### 2023-12-03
+### 2023-12-06
 ]
 
 ---
@@ -90,8 +90,9 @@ names(doubs$fish)
 ```
 
 ```
-##  [1] "Cogo" "Satr" "Phph" "Neba" "Thth" "Teso" "Chna" "Chto" "Lele" "Lece" "Baba" "Spbi" "Gogo" "Eslu" "Pefl" "Rham" "Legi" "Scer" "Cyca" "Titi" "Abbr" "Icme" "Acce" "Ruru"
-## [25] "Blbj" "Alal" "Anan"
+##  [1] "Cogo" "Satr" "Phph" "Neba" "Thth" "Teso" "Chna" "Chto" "Lele" "Lece" "Baba"
+## [12] "Spbi" "Gogo" "Eslu" "Pefl" "Rham" "Legi" "Scer" "Cyca" "Titi" "Abbr" "Icme"
+## [23] "Acce" "Ruru" "Blbj" "Alal" "Anan"
 ```
 ---
 # Correspondence Analysis
@@ -109,7 +110,7 @@ screeplot(coa1, main = " ", xlab = " ")
 ---
 # Inertia statistics
 
-* Compute the percentage of variation explained bu the first PCA axes
+* Compute the percentage of variation explained by the first COA axes
 
 
 ```r
@@ -166,7 +167,7 @@ s.value(doubs$xy, coa1$li[, 1:2], pgrid.draw = FALSE,
 ---
 # Principal Component Analysis
 
-PCA can also be applied on the abundance table. Perform PCAon `doubs$fish` table. Should we scale or not?
+PCA can also be applied on the abundance table. Perform PCA on `doubs$fish` table. Should we scale or not?
 
 
 ```r
